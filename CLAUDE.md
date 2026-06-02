@@ -3,6 +3,8 @@
 App (white-label) de acompanhamento de transporte universitário + rastreamento GPS. **Venda B2B:** o comprador é uma **empresa de transporte (operadora)** que atende/quer atender contrato de transporte universitário na região de **Saquarema-RJ**. Quem paga a operadora é a **prefeitura** (contexto de licitação). Desenvolvido por **Lone Mídia**.
 
 > Status: **Pré-venda.** Duas apresentações + motor de copy + validação técnica prontos. O desenvolvimento começa após o fechamento, aqui mesmo neste projeto. Última atualização: **2026-06-02**.
+>
+> **Repositório:** https://github.com/phzus/rastreador-alunos (branch `main`).
 
 ---
 

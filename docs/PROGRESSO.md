@@ -28,6 +28,9 @@ Sessão de fundação do projeto (pré-venda).
 - **Slide de custo refeito** com tarifas do WhatsApp por conversa (Utilidade R$0,06, Marketing R$0,58, 1.000 grátis/mês) + exemplo. App push = R$0. Atualizado também em SOLUCAO-TECNICA.
 - Deck passou de 13 → **15 slides**. Render revalidado.
 
+### Repositório
+- Projeto versionado em git e vinculado a **https://github.com/phzus/rastreador-alunos** (branch `main`). Commit inicial com deck, proposta técnica, PDFs, motor de copy e docs. Screenshots de verificação ignorados via `.gitignore`.
+
 **Pendente**
 - Preencher placeholders (nome da empresa, telefone).
 - Decidir se a Proposta Técnica também é limpa de licitação/prefeitura (ver OPEN-QUESTIONS).
