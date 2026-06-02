@@ -1,0 +1,384 @@
+# Anti-IA Blacklist v2.0 — Palavras, Expressões e Padrões Proibidos
+# Uso: TODOS os agentes do MSE — toda entrega deve passar por este filtro
+# Violação = rejeição automática + reescrita obrigatória
+# Atualizado: 2026-04-02
+
+blacklist:
+
+  # ═══════════════════════════════════════════════════════════
+  # 1. EXPRESSÕES PROIBIDAS (frases que gritam "IA escreveu")
+  # ═══════════════════════════════════════════════════════════
+  expressoes_proibidas:
+    # --- Conectivos acadêmicos / burocráticos ---
+    - "no cenário atual"
+    - "é importante destacar"
+    - "em outras palavras"
+    - "nesse sentido"
+    - "diante disso"
+    - "vale ressaltar"
+    - "é fundamental que"
+    - "dessa forma"
+    - "sendo assim"
+    - "portanto"
+    - "ademais"
+    - "outrossim"
+    - "nessa perspectiva"
+    - "é imprescindível"
+    - "cabe salientar"
+    - "face ao exposto"
+    - "em suma"
+    - "por conseguinte"
+    - "indubitavelmente"
+    - "com efeito"
+    - "não obstante"
+    - "destarte"
+    - "por derradeiro"
+    - "à luz de"
+    - "tendo em vista"
+    - "no que tange"
+    - "em consonância"
+    - "no âmbito de"
+
+    # --- Expressões genéricas de IA ---
+    - "essa ferramenta inovadora"
+    - "solução completa"
+    - "método revolucionário"
+    - "resultados surpreendentes"
+    - "transforme sua vida"
+    - "descubra o segredo"
+    - "fórmula infalível"
+    - "últimas tendências"
+    - "profissional qualificado"
+    - "em um mundo cada vez mais"
+    - "nos dias de hoje"
+    - "não podemos deixar de mencionar"
+    - "é inegável que"
+    - "mergulhe nessa jornada"
+    - "desbloqueie o potencial"
+    - "eleve o nível"
+    - "potencialize seus resultados"
+    - "experimente a diferença"
+    - "descubra como"
+    - "imagine um mundo onde"
+    - "e se eu te dissesse que"
+    - "a verdade é que"
+    - "o segredo está em"
+    - "chegou a hora de"
+    - "está na hora de"
+    - "prepare-se para"
+    - "leve para o próximo nível"
+    - "deixe-me te contar uma coisa"
+
+    # --- Falso entusiasmo e hipérboles vazias ---
+    - "absolutamente incrível"
+    - "verdadeiramente transformador"
+    - "extremamente poderoso"
+    - "completamente revolucionário"
+    - "totalmente inovador"
+    - "simplesmente extraordinário"
+    - "genuinamente impactante"
+    - "profundamente inspirador"
+
+  # ═══════════════════════════════════════════════════════════
+  # 2. INÍCIO DE PARÁGRAFO PROIBIDO
+  # ═══════════════════════════════════════════════════════════
+  inicio_paragrafo_proibido:
+    - "Além disso"
+    - "Por outro lado"
+    - "Nesse contexto"
+    - "Sendo assim"
+    - "Portanto"
+    - "Ademais"
+    - "Em conclusão"
+    - "Para concluir"
+    - "Em resumo"
+    - "Nesse sentido"
+    - "Diante disso"
+    - "No entanto"
+    - "Contudo"
+    - "Em síntese"
+    - "Em última análise"
+    - "Vale destacar que"
+    - "É importante notar que"
+    - "Cabe mencionar que"
+    - "Convém ressaltar que"
+    - "Em primeiro lugar"
+    - "Em segundo lugar"
+    - "Por fim"
+    - "Para finalizar"
+    - "Imagine"
+    - "Vamos explorar"
+    - "Vamos mergulhar"
+
+  # ═══════════════════════════════════════════════════════════
+  # 3. PALAVRAS SUPERUSADAS POR IA (usar com extrema cautela)
+  # ═══════════════════════════════════════════════════════════
+  palavras_ia_overused:
+    pt_br:
+      - "transformar" # usar: mudar, virar, ajustar
+      - "jornada" # usar: caminho, processo, trajeto
+      - "inovador" # usar: diferente, novo, inédito
+      - "revolucionário" # usar: que muda o jogo, disruptivo
+      - "robusto" # usar: forte, sólido, consistente
+      - "alavancagem" # usar: impulso, ganho, uso estratégico
+      - "empoderar" # usar: dar autonomia, capacitar
+      - "impactar" # usar: afetar, mudar, mexer com
+      - "engajar" # usar: envolver, conectar, prender
+      - "otimizar" # usar: melhorar, ajustar, refinar
+      - "escalar" # usar: crescer, expandir, multiplicar
+      - "disruptivo" # usar: que quebra padrão, diferente
+      - "holístico" # usar: completo, integral
+      - "sinérgico" # usar: que se complementa, combinado
+      - "ressonância" # usar: conexão, identificação
+      - "paradigma" # usar: modelo, padrão, forma de pensar
+      - "ecossistema" # usar: conjunto, ambiente, sistema
+      - "sinergia" # usar: força combinada
+      - "insights" # usar: percepções, descobertas, sacadas
+      - "mindset" # usar: mentalidade, forma de pensar (ou manter se o expert usa)
+      - "benchmark" # usar: referência, parâmetro
+      - "framework" # ok em contexto técnico, evitar em copy para leigo
+      - "stakeholders" # usar: envolvidos, interessados, parceiros
+
+    en_common_in_br:
+      - "delve" # nunca usar
+      - "landscape" # nunca em copy BR
+      - "tapestry" # nunca usar
+      - "foster" # nunca usar
+      - "harness" # nunca usar
+      - "leverage" # nunca usar
+      - "navigate" # como metáfora, evitar
+      - "unlock" # como metáfora, evitar
+      - "seamless" # usar: fluido, sem fricção
+      - "cutting-edge" # usar: de ponta
+      - "game-changer" # usar: que muda o jogo (com cautela)
+      - "next-level" # usar: de outro nível (com cautela)
+      - "supercharge" # nunca usar
+      - "reimagine" # nunca usar
+      - "elevate" # nunca usar
+
+  # ═══════════════════════════════════════════════════════════
+  # 4. ADJETIVOS GENÉRICOS (substituir por específicos)
+  # ═══════════════════════════════════════════════════════════
+  adjetivos_genericos:
+    - "incrível" # substituir por resultado concreto
+    - "extraordinário" # substituir por dado específico
+    - "transformador" # substituir por antes/depois real
+    - "poderoso" # substituir por benefício tangível
+    - "surpreendente" # substituir por fato concreto
+    - "revolucionário" # substituir por diferencial real
+    - "excepcional" # substituir por prova social
+    - "fantástico" # substituir por resultado mensurável
+    - "magnífico" # substituir por descrição sensorial
+    - "espetacular" # substituir por número real
+    - "impressionante" # substituir por caso concreto
+    - "maravilhoso" # substituir por experiência real
+    - "sensacional" # substituir por depoimento real
+    - "fenomenal" # substituir por dado verificável
+
+  # ═══════════════════════════════════════════════════════════
+  # 5. PADRÕES ESTRUTURAIS DE IA (detectáveis por leitores)
+  # ═══════════════════════════════════════════════════════════
+  padroes_estruturais_proibidos:
+
+    # --- NOVO: FRAGMENTAÇÃO DE FRASES (marca d'água #1 de IA) ---
+    fragmentacao_de_frases:
+      descricao: |
+        IA quebra uma ideia que deveria ser UMA FRASE completa em múltiplas
+        frases curtas separadas por ponto final. Em vez de desenvolver o
+        raciocínio por completo, a IA fatia a mesma ideia com pontos no meio.
+      exemplo_proibido: |
+        "O Anthony. É um cara. Que está. Há cinco meses com gripe. E nunca melhora."
+        "Você vai aprender. A criar funis. Que convertem. De verdade."
+        "Isso muda. Tudo. Para sempre."
+        "A estratégia. É simples. Mas poderosa."
+      exemplo_correto: |
+        "O Anthony é um cara que está há cinco meses com gripe e nunca melhora."
+        "Você vai aprender a criar funis que convertem de verdade."
+        "Isso muda tudo — e o impacto é permanente."
+      regra: |
+        NUNCA fatie uma ideia completa em micro-frases de 2-4 palavras separadas
+        por ponto final. Desenvolva o raciocínio INTEIRO numa frase fluida,
+        depois pule para a próxima ideia no parágrafo seguinte.
+        Frases curtas de impacto SÃO permitidas — mas como recurso retórico
+        pontual (1 a cada 5-8 frases), NUNCA como padrão dominante.
+      severidade: BLOCK
+
+    # --- NOVO: LISTAS COM VÍRGULA EM VEZ DE BULLET POINTS ---
+    listas_com_virgula:
+      descricao: |
+        Quando o texto lista problemas, benefícios, situações ou itens do lead,
+        usar BULLET POINTS em vez de vírgulas corridas — especialmente em e-mails,
+        anúncios estáticos e carrosséis. Bullet points são visualmente mais limpos
+        e mais fáceis de escanear.
+      exemplo_proibido: |
+        "Você está investindo muito em anúncios, mas não consegue leads
+        qualificados, está perdendo tempo com lead quebrado, o seu closer está
+        ocioso, o seu custo por lead está aumentando e o seu faturamento está
+        caindo."
+      exemplo_correto: |
+        "Você está vivendo essa realidade?
+
+        • Investindo pesado em anúncios, mas sem leads qualificados
+        • Perdendo tempo com lead quebrado que nunca fecha
+        • Closer ocioso esperando oportunidades que não chegam
+        • Custo por lead subindo mês a mês
+        • Faturamento caindo enquanto o investimento sobe"
+      regra: |
+        Em e-mails, anúncios estáticos, carrosséis e copy de página:
+        quando listar 3+ itens (problemas, benefícios, features, situações),
+        SEMPRE usar bullet points (•) em vez de vírgulas corridas.
+        Exceção: WhatsApp (onde bullet points pesados atrapalham a leitura).
+      severidade: BLOCK
+
+    # --- Padrões estruturais anteriores (expandidos) ---
+    regra_do_tres_obsessiva:
+      descricao: "IA SEMPRE lista exatamente 3 itens. SEMPRE 3 benefícios. SEMPRE 3 problemas. SEMPRE 3 exemplos."
+      regra: "Variar: use 2, 4, 5 ou 7 itens. Quebre o padrão de tricolon."
+      severidade: WARN
+
+    simetria_perfeita:
+      descricao: "3 bullets com mesma estrutura gramatical, mesmo tamanho, mesma pontuação"
+      regra: "Misturar tamanhos, estruturas e estilos nos bullets"
+      severidade: WARN
+
+    abertura_cliche:
+      descricao: "Começar com 'Imagine...', 'Em um mundo onde...', 'No cenário atual...', 'Você já se perguntou...'"
+      regra: "Abrir com fato, dado, história ou afirmação direta"
+      severidade: BLOCK
+
+    conclusao_resumo:
+      descricao: "Fechar resumindo tudo que já foi dito — 'Em resumo...', 'Recapitulando...'"
+      regra: "Fechar com CTA, provocação, ou frase de impacto — nunca com resumo"
+      severidade: BLOCK
+
+    paragrafos_uniformes:
+      descricao: "Todos os parágrafos com mesmo tamanho (3-4 linhas cada)"
+      regra: "Variar: 1 linha, 2 linhas, 4 linhas, frase solta. Ritmo irregular."
+      severidade: WARN
+
+    transicoes_mecanicas:
+      descricao: "'Agora que vimos X, vamos falar de Y', 'Dito isto...', 'Com isso em mente...'"
+      regra: "Transições invisíveis — o leitor não deve perceber a mudança de bloco"
+      severidade: WARN
+
+    headers_previssiveis:
+      descricao: "'O que é X', 'Por que X é importante', 'Como X funciona', 'Benefícios de X'"
+      regra: "Headers criativos, provocativos ou com benefício embutido"
+      severidade: WARN
+
+    falsa_empatia:
+      descricao: "'Eu sei como você se sente...', 'Eu entendo sua frustração...', 'Você não está sozinho...'"
+      regra: "Mostrar empatia através de cenários concretos, não frases genéricas"
+      severidade: WARN
+
+    padrao_nao_e_x_e_y:
+      descricao: "'Não é só sobre aprender. É sobre transformar.', 'Não é apenas um curso. É uma jornada.'"
+      regra: "Desenvolver a ideia com profundidade em vez de fórmulas binárias"
+      severidade: BLOCK
+
+    padrao_sem_x_sem_y_so_z:
+      descricao: "'Sem enrolação. Sem fórmula. Só resultado.'"
+      regra: "Descrever o diferencial de forma concreta e original"
+      severidade: BLOCK
+
+    exclamacoes_excessivas:
+      descricao: "Cada frase termina com ! Tudo é empolgante! Você vai amar! É incrível!"
+      regra: "Máximo 1 exclamação a cada 5-8 frases. Ponto final transmite mais confiança."
+      severidade: WARN
+
+    perguntas_retoricas_forcadas:
+      descricao: "'A verdade? Isso muda tudo.', 'O segredo? Fazer do jeito certo.'"
+      regra: "Afirmações diretas e confiantes em vez de perguntas artificiais"
+      severidade: BLOCK
+
+  # ═══════════════════════════════════════════════════════════
+  # 6. PADRÕES VISUAIS/DESIGN PROIBIDOS
+  # ═══════════════════════════════════════════════════════════
+  padroes_visuais_proibidos:
+    - "Emojis como elementos visuais em páginas/criativos"
+    - "Ícones genéricos FontAwesome/Material como decoração"
+    - "Ilustrações 3D infantis estilo IA (blobs, personagens cartoon)"
+    - "Gradientes roxo-para-azul clichê"
+    - "Gradientes neon genéricos (rosa-cyan, verde-azul)"
+    - "Layouts simétricos previsíveis (hero + 3 cards + FAQ)"
+    - "Fontes genéricas: Inter, Roboto, Arial, Open Sans, Montserrat, Poppins"
+    - "Backgrounds brancos chapados sem profundidade"
+    - "Cards brancos sem sombra em fundo branco"
+    - "Checkmarks coloridos como bullet points"
+    - "Fotos genéricas de banco (pessoa sorrindo pro computador, handshake)"
+    - "Ícones de foguete, lâmpada, alvo, engrenagem como metáforas visuais"
+    - "Mockups de celular/laptop genéricos flutuando"
+    - "Pessoas de banco diversas demais para ser real (token diversity)"
+    - "Textura de ruído/grain excessivo (tendência IA 2024-2025)"
+    - "Glassmorphism mal aplicado (vidro em tudo)"
+    - "Sombras em drop shadow genérico (não difuso, não intencional)"
+    - "Bordas arredondadas uniformes em TUDO (16px em tudo)"
+    - "Paleta monocromática sem contraste (só tons de azul, só tons de roxo)"
+
+  # ═══════════════════════════════════════════════════════════
+  # 7. FORMATAÇÃO PROIBIDA
+  # ═══════════════════════════════════════════════════════════
+  formatacao_proibida:
+    - "Uso excessivo de emojis (mais de 3 por parágrafo)"
+    - "Bullets com ✅ ou emojis como marcador (exceto WhatsApp)"
+    - "Parágrafos com mais de 3 linhas em e-mail/WhatsApp"
+    - "Blocos de texto sem quebra visual"
+    - "Negrito em TUDO (quando tudo é negrito, nada é)"
+    - "Itálico em frases inteiras (usar apenas em palavras-chave)"
+    - "CAIXA ALTA em frases inteiras (exceto headline de 1 linha)"
+    - "Sublinhado em tudo (reservar para hiperlinks)"
+    - "3+ tipos de formatação na mesma frase (negrito + itálico + caixa alta)"
+    - "Headers genéricos como 'Introdução', 'Conclusão', 'Resumo'"
+
+  # ═══════════════════════════════════════════════════════════
+  # 8. PADRÕES DE EMAIL PROIBIDOS
+  # ═══════════════════════════════════════════════════════════
+  padroes_email_proibidos:
+    - "Subject line: 'Você não vai acreditar...'"
+    - "Subject line: 'O segredo que ninguém te conta'"
+    - "Subject line: 'Isso vai mudar sua vida'"
+    - "Subject line: '[URGENTE]' quando não é urgente"
+    - "Abertura: 'Espero que este e-mail te encontre bem'"
+    - "Abertura: 'Tudo bem com você?'"
+    - "Fechamento: 'Estou ansioso para ouvir sua resposta'"
+    - "Fechamento: 'Qualquer dúvida, estou à disposição' (sem CTA real)"
+    - "PS genérico sem valor real"
+    - "Assinatura com 10+ linhas de cargo/redes/disclaimer"
+
+  # ═══════════════════════════════════════════════════════════
+  # 9. SUBSTITUTOS RECOMENDADOS
+  # ═══════════════════════════════════════════════════════════
+  substitutos:
+    "no cenário atual": "hoje | agora | neste momento"
+    "é importante destacar": "[remover — ir direto ao ponto]"
+    "em outras palavras": "[reformular a frase original com clareza]"
+    "Além disso": "[começar com o conteúdo direto]"
+    "portanto": "por isso | então | [ponto final + nova frase]"
+    "vale ressaltar": "[dizer diretamente o que quer ressaltar]"
+    "nesse sentido": "[remover — continuar o raciocínio]"
+    "diante disso": "[remover — ir direto à consequência]"
+    "é fundamental": "[afirmar com autoridade sem muleta]"
+    "transformar": "mudar | virar | ajustar | reformular"
+    "jornada": "caminho | processo | trajeto | estrada"
+    "inovador": "diferente | novo | inédito | que ninguém faz"
+    "incrível": "[resultado concreto com número]"
+    "extraordinário": "[dado específico e verificável]"
+
+  # ═══════════════════════════════════════════════════════════
+  # 10. REGRAS DE HUMANIZAÇÃO (obrigatórias)
+  # ═══════════════════════════════════════════════════════════
+  regras_humanizacao:
+    - "Usar contrações naturais (tá, pra, pro, né) quando o tom permitir"
+    - "Variar tamanho das frases (curta → longa → média → solta)"
+    - "Incluir imperfeições intencionais (reticências, travessão, frase incompleta)"
+    - "Usar pergunta retórica para engajar (mas com moderação — max 1 a cada 8 frases)"
+    - "Quebrar padrão com frase de uma palavra isolada. Tipo assim."
+    - "Referências culturais do público-alvo"
+    - "Nunca 3 frases seguidas com mesma estrutura gramatical"
+    - "Desenvolver ideias completas ANTES de quebrar em parágrafos"
+    - "Preferir bullet points (•) a vírgulas corridas em listas de 3+ itens"
+    - "Frase curta de impacto = recurso pontual, não padrão dominante"
+    - "Tom de conversa: como se estivesse falando com UM amigo, não com uma plateia"
+    - "Analogias do nicho — nunca metáforas genéricas (jornada, transformação, etc.)"
+    - "Opinião forte > neutralidade polida. Copywriter bom toma posição."
+    - "Dados concretos > adjetivos. '347 alunos em 6 meses' > 'resultados incríveis'"

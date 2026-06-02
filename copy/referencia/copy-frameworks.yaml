@@ -1,0 +1,134 @@
+# Copy Frameworks — Estruturas de Copy de Elite
+# Uso: @claudinho — referência rápida para estruturação de peças
+# Fonte: Gary Halbert, Eugene Schwartz, Joseph Sugarman, Dan Kennedy, Todd Brown
+
+frameworks:
+
+  # === HEADLINES ===
+  headlines:
+    regra_4u:
+      name: "4 U's (Dan Kennedy)"
+      structure: "Urgente + Único + Ultra-específico + Útil"
+      example: "Nos próximos 7 dias, descubra o método que 2.347 engenheiros usaram para passar em concurso sem largar o emprego"
+
+    headline_formulas:
+      - "Como {resultado} sem {objeção}"
+      - "O método de {número} passos para {resultado} em {tempo}"
+      - "{Número} {pessoas} já {resultado}. Você é o próximo?"
+      - "Atenção {avatar}: {promessa específica}"
+      - "Por que {situação comum} está {consequência} (e o que fazer)"
+      - "A verdade sobre {tema} que {autoridade} não conta"
+      - "Pare de {dor} e comece a {resultado} hoje"
+
+  # === ESTRUTURAS DE COPY ===
+  aida:
+    name: "AIDA"
+    steps:
+      - "Attention: Hook que para o scroll"
+      - "Interest: Problema + agitação"
+      - "Desire: Solução + benefícios + prova"
+      - "Action: CTA claro e urgente"
+
+  pas:
+    name: "PAS (Problem-Agitate-Solve)"
+    steps:
+      - "Problem: Identificar a dor específica"
+      - "Agitate: Amplificar a consequência de não resolver"
+      - "Solve: Apresentar a solução como caminho natural"
+
+  pastor:
+    name: "PASTOR (Ray Edwards)"
+    steps:
+      - "Problem: Identificar o problema"
+      - "Amplify: Amplificar as consequências"
+      - "Story: Contar história de transformação"
+      - "Testimony: Prova social"
+      - "Offer: Apresentar a oferta"
+      - "Response: Call to action"
+
+  slippery_slide:
+    name: "Slippery Slide (Joseph Sugarman)"
+    rule: "Cada frase tem UM único objetivo: fazer o leitor ler a próxima frase."
+    application:
+      - "Primeira frase curta e impactante"
+      - "Segunda frase expande com curiosidade"
+      - "Terceira frase cria tensão"
+      - "Nunca revelar tudo de uma vez"
+      - "Usar 'bucket brigades': 'Mas espere...', 'E tem mais...', 'Aqui é onde fica interessante...'"
+
+  # === SCHWARTZ — NÍVEIS DE CONSCIÊNCIA ===
+  awareness_levels:
+    name: "5 Níveis de Consciência (Eugene Schwartz)"
+    levels:
+      - level: "Unaware"
+        description: "Não sabe que tem um problema"
+        copy_approach: "Conteúdo educativo, storytelling, identificação"
+        lead: "Curiosidade pura — história, pergunta provocativa"
+      - level: "Problem Aware"
+        description: "Sabe que tem um problema, não conhece soluções"
+        copy_approach: "Agitar a dor, mostrar consequências, apresentar categoria de solução"
+        lead: "Identificação — 'Você já sentiu...?'"
+      - level: "Solution Aware"
+        description: "Conhece soluções, não conhece SEU produto"
+        copy_approach: "Diferenciar via mecanismo único, comparação indireta"
+        lead: "Mecanismo único — 'Existe um método diferente...'"
+      - level: "Product Aware"
+        description: "Conhece seu produto, não decidiu comprar"
+        copy_approach: "Prova social, garantia, urgência, quebra de objeções"
+        lead: "Oferta direta — benefícios + prova + urgência"
+      - level: "Most Aware"
+        description: "Pronto para comprar, precisa do empurrão"
+        copy_approach: "Desconto, bônus exclusivo, deadline, escassez real"
+        lead: "Oferta irrecusável — 'Última chance: 40% OFF'"
+
+  # === HORMOZI — OFERTA ===
+  grand_slam_offer:
+    name: "Grand Slam Offer (Alex Hormozi)"
+    formula: "Valor = Resultado Sonhado × Probabilidade Percebida / Tempo × Esforço"
+    components:
+      - "Dream Outcome: O que o avatar mais deseja"
+      - "Perceived Likelihood: Por que vai funcionar (prova)"
+      - "Time Delay: Quão rápido entrega resultado"
+      - "Effort & Sacrifice: Quão fácil é o processo"
+    stacking:
+      - "Core Offer: O produto principal"
+      - "Bonus 1: Resolve objeção #1"
+      - "Bonus 2: Acelera o resultado"
+      - "Bonus 3: Remove risco percebido"
+      - "Garantia: Incondicional ou condicional"
+      - "Urgência: Deadline real ou escassez"
+    teste: "'Seria burrice recusar isso?' Se não, ajustar até que sim."
+
+  # === TODD BROWN — MECANISMO ÚNICO ===
+  unique_mechanism:
+    name: "Unique Mechanism (Todd Brown)"
+    definition: "A coisa específica, única e identificável que torna sua solução diferente e superior"
+    tipos:
+      - "Mecanismo de Processo: Método, sistema, framework proprietário"
+      - "Mecanismo de Ingrediente: Componente único que outros não têm"
+      - "Mecanismo de Formato: Forma diferente de entregar (app, comunidade, mentoria)"
+    naming_rules:
+      - "Dar um NOME proprietário ao mecanismo"
+      - "Nome deve soar técnico-mas-acessível"
+      - "Exemplos: 'Método DNA Mental™', 'Framework 7 Chaves', 'Sistema Nexialista'"
+      - "NUNCA usar: 'método', 'curso', 'treinamento' sozinhos"
+
+  # === EMAIL SEQUENCES ===
+  plf_email_sequence:
+    name: "Sequência PLF (Jeff Walker)"
+    emails:
+      - type: "Abertura de Carrinho"
+        tone: "Empolgação, novidade"
+        focus: "Apresentar oferta, link direto, energia alta"
+      - type: "Lógica"
+        tone: "Racional, comparativo"
+        focus: "ROI, dados, comparações, argumento intelectual"
+      - type: "Emoção"
+        tone: "Storytelling, transformação"
+        focus: "Depoimentos, história, identificação emocional"
+      - type: "Urgência"
+        tone: "Escassez real, deadline"
+        focus: "Tempo acabando, vagas limitadas, consequência de não agir"
+      - type: "Última Chance"
+        tone: "Despedida, tom final"
+        focus: "Porta fechando, última oportunidade, sem volta"

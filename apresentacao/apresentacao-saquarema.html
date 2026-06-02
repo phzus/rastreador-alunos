@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  APRESENTAÇÃO DE VENDA — App de acompanhamento para empresa de ônibus
+  Venda B2B PRIVADA. NÃO mencionar licitação/prefeitura/edital/contrato público.
+  Valor: a família acompanha a viagem → menos reclamação no administrativo,
+  mais segurança, serviço que vira diferencial. Foco em UX/facilidade (cidade
+  com pouca familiaridade com tecnologia). Copy filtrada pelo anti-ia-blacklist.
+  Formato: 16:9 (1280x720), uma página por slide. 15 slides.
+
+  EXPORTAR PDF: Ctrl/Cmd+P → Salvar como PDF → Paisagem → Margens Nenhuma
+  → Escala 100% → marcar "Gráficos de plano de fundo".
+
+  PREENCHER: "[NOME DA EMPRESA]" (capa/app), telefone (slide final).
+  Números do WhatsApp = tarifas informadas (conversa 24h, BR).
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App de Acompanhamento — Proposta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1726; --ink-2:#1B2740;
+    --muted:#586074; --muted-2:#8A92A3;
+    --line:#E5E8EF; --paper:#FAFBFD; --bg:#FFFFFF; --soft:#F3F6FB; --soft-2:#EDF1F8;
+    --brand:#1B4DD1; --brand-dark:#12317F; --brand-soft:#E8EEFC;
+    --accent:#F4A900; --accent-soft:#FDF1D6;
+    --good:#15803D; --good-soft:#E7F4EC;
+    --bad:#C03333; --bad-soft:#FBEBEB;
+    --w:1280px; --h:720px; --pad:72px;
+    --shadow:0 1px 2px rgba(14,23,38,.04), 0 14px 32px -14px rgba(14,23,38,.12);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:#0E1726; }
+  body{ font-family:'Hanken Grotesk','Segoe UI',system-ui,-apple-system,sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  .deck{ width:var(--w); margin:0 auto; }
+  .slide{ position:relative; width:var(--w); height:var(--h); background:var(--paper); overflow:hidden; padding:var(--pad); display:flex; flex-direction:column; }
+  .slide--dark{ background:var(--ink); color:#fff; }
+  .slide--brand{ background:var(--brand-dark); color:#fff; }
+
+  .eyebrow{ font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--brand); display:flex; align-items:center; gap:10px; }
+  .slide--dark .eyebrow,.slide--brand .eyebrow{ color:var(--accent); }
+  .eyebrow::before{ content:""; width:26px; height:2px; background:currentColor; display:inline-block; }
+
+  .s-title{ font-weight:800; font-size:42px; line-height:1.08; letter-spacing:-.02em; color:var(--ink); }
+  .slide--dark .s-title,.slide--brand .s-title{ color:#fff; }
+  .s-title .hl{ color:var(--brand); } .slide--dark .s-title .hl,.slide--brand .s-title .hl{ color:var(--accent); }
+  .s-lead{ font-size:19px; line-height:1.5; color:var(--muted); }
+  .slide--dark .s-lead{ color:#C5CCDA; } .slide--brand .s-lead{ color:#D5DEF5; }
+  .display{ font-weight:800; font-size:54px; line-height:1.06; letter-spacing:-.025em; }
+  .display-sm{ font-weight:800; font-size:40px; line-height:1.1; letter-spacing:-.02em; }
+  .accent-text{ color:var(--accent); }
+
+  .foot{ position:absolute; left:var(--pad); right:var(--pad); bottom:34px; display:flex; align-items:center; justify-content:space-between; font-size:12px; color:var(--muted-2); letter-spacing:.03em; border-top:1px solid var(--line); padding-top:14px; }
+  .slide--dark .foot,.slide--brand .foot{ color:rgba(255,255,255,.45); border-color:rgba(255,255,255,.14); }
+  .foot b{ font-weight:600; color:var(--muted); } .slide--dark .foot b{ color:rgba(255,255,255,.7); }
+  .foot .pg{ font-variant-numeric:tabular-nums; }
+
+  .grow{ flex:1; } .center{ justify-content:center; }
+  .row{ display:flex; gap:28px; } .col{ display:flex; flex-direction:column; }
+  .gap-s{ gap:14px; } .gap-m{ gap:22px; }
+  .mt-s{ margin-top:14px; } .mt-m{ margin-top:24px; } .mt-l{ margin-top:36px; }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:9px; box-shadow:var(--shadow); }
+  .card h4{ font-size:17.5px; font-weight:700; color:var(--ink); letter-spacing:-.01em; }
+  .card p{ font-size:14px; line-height:1.45; color:var(--muted); }
+  .slide--dark .card{ background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.12); box-shadow:none; }
+  .slide--dark .card h4{ color:#fff; } .slide--dark .card p{ color:#C5CCDA; }
+
+  .ico{ width:44px; height:44px; border-radius:11px; flex:none; display:flex; align-items:center; justify-content:center; background:var(--brand-soft); color:var(--brand); }
+  .ico svg{ width:23px; height:23px; }
+  .ico.amber{ background:var(--accent-soft); color:#B57E00; }
+  .ico.good{ background:var(--good-soft); color:var(--good); }
+  .ico.bad{ background:var(--bad-soft); color:var(--bad); }
+  .ico.dark{ background:rgba(255,255,255,.12); color:#fff; }
+
+  .tag{ display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; align-self:flex-start; }
+  .tag.good{ background:var(--good-soft); color:var(--good); }
+  .tag.neutral{ background:var(--soft-2); color:var(--muted); }
+  .pill{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; padding:7px 14px; border-radius:999px; background:rgba(255,255,255,.1); color:#fff; }
+
+  .kpi{ font-weight:800; letter-spacing:-.02em; }
+  .step-num{ font-weight:800; font-size:14px; width:32px; height:32px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center; background:var(--ink); color:#fff; }
+
+  /* phone */
+  .phone{ width:258px; height:524px; border-radius:36px; background:#0E1726; padding:12px; flex:none; box-shadow:0 26px 50px rgba(14,23,38,.30); position:relative; }
+  .phone .screen{ background:#EEF1F6; border-radius:26px; height:100%; overflow:hidden; display:flex; flex-direction:column; }
+  .phone .notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:104px; height:21px; background:#0E1726; border-radius:0 0 14px 14px; z-index:2; }
+  .app-top{ background:var(--brand-dark); color:#fff; padding:24px 15px 13px; }
+  .app-brand{ font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:7px; }
+  .app-brand .d{ width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .app-sub{ font-size:10px; opacity:.82; margin-top:3px; }
+  .app-notifs{ flex:1; padding:12px; display:flex; flex-direction:column; gap:9px; }
+  .ntf{ background:#fff; border-radius:11px; padding:10px 11px; font-size:11.5px; line-height:1.35; color:var(--ink); display:flex; gap:9px; box-shadow:0 1px 2px rgba(0,0,0,.05); align-items:flex-start; }
+  .ntf .ni{ width:27px; height:27px; border-radius:7px; flex:none; display:flex; align-items:center; justify-content:center; background:var(--brand-soft); color:var(--brand); }
+  .ntf.good .ni{ background:var(--good-soft); color:var(--good); } .ntf.amber .ni{ background:var(--accent-soft); color:#B57E00; }
+  .ntf .nt{ display:block; font-size:9px; color:var(--muted-2); margin-top:3px; font-weight:500; } .ntf b{ font-weight:700; }
+  .ntf.hl{ outline:2px solid var(--accent); }
+  /* app: form (login) */
+  .app-form{ flex:1; padding:18px 15px; display:flex; flex-direction:column; gap:11px; }
+  .app-form .ttl{ font-size:13.5px; font-weight:700; color:var(--ink); margin-bottom:2px; }
+  .fld{ display:flex; flex-direction:column; gap:4px; }
+  .fld .lb{ font-size:10px; color:var(--muted); font-weight:600; }
+  .fld .in{ background:#fff; border:1px solid var(--line); border-radius:9px; padding:10px 11px; font-size:12.5px; color:var(--ink); }
+  .fld .in.ph{ color:var(--muted-2); }
+  .app-btn{ background:var(--brand); color:#fff; text-align:center; padding:11px; border-radius:9px; font-weight:700; font-size:12.5px; margin-top:3px; }
+  .app-hint{ font-size:9.5px; color:var(--muted-2); text-align:center; margin-top:5px; line-height:1.4; }
+  /* app: map (choose point) */
+  .app-map{ flex:1; position:relative; background:#DDE3EC; }
+  .app-map .pin{ position:absolute; top:42%; left:50%; transform:translate(-50%,-100%); color:var(--brand); }
+  .app-map .pin svg{ width:34px; height:34px; filter:drop-shadow(0 3px 4px rgba(0,0,0,.25)); }
+  .app-bar{ background:#fff; padding:11px 13px; border-top:1px solid var(--line); }
+  .app-bar .pt{ font-size:9.5px; color:var(--muted); } .app-bar .pv{ font-size:12.5px; font-weight:700; color:var(--ink); }
+
+  /* options */
+  .opt{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:22px; display:flex; flex-direction:column; gap:13px; box-shadow:var(--shadow); }
+  .opt.rec{ border:1.5px solid var(--brand); box-shadow:0 16px 34px -12px rgba(27,77,209,.28); }
+  .opt h4{ font-size:20px; font-weight:800; letter-spacing:-.01em; }
+  .opt p{ font-size:14px; line-height:1.45; color:var(--muted); }
+  .mini-notif{ display:flex; flex-direction:column; gap:7px; }
+  .mini-notif .r{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--ink); background:var(--soft); border:1px solid var(--line); border-radius:9px; padding:8px 11px; font-weight:500; }
+  .mini-notif .r .b{ width:9px; height:9px; border-radius:50%; flex:none; } .mini-notif .r.hl{ background:var(--accent-soft); border-color:#EBCF8F; }
+  .mini-map{ height:96px; border-radius:11px; overflow:hidden; border:1px solid var(--line); position:relative; }
+  .mini-map .lbl{ position:absolute; left:10px; bottom:8px; background:#fff; border-radius:7px; font-size:10.5px; font-weight:600; padding:3px 8px; color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.12); }
+
+  /* timeline */
+  .tl{ display:grid; grid-template-columns:repeat(4,1fr); position:relative; }
+  .tl .ph{ padding:0 16px; display:flex; flex-direction:column; gap:9px; position:relative; }
+  .tl .dot{ width:15px; height:15px; border-radius:50%; background:var(--brand); border:3px solid var(--brand-soft); } .tl .ph.amber .dot{ background:var(--accent); border-color:var(--accent-soft); }
+  .tl .ln{ position:absolute; top:53px; left:0; right:0; height:2px; background:var(--line); z-index:0; }
+  .tl .ph .when{ font-size:11.5px; font-weight:700; color:var(--brand); letter-spacing:.04em; text-transform:uppercase; }
+  .tl .ph h5{ font-size:16px; font-weight:700; } .tl .ph p{ font-size:13px; color:var(--muted); line-height:1.4; }
+
+  /* cost calc */
+  .calc{ border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#fff; box-shadow:var(--shadow); }
+  .calc .rowx{ display:flex; justify-content:space-between; align-items:center; padding:11px 16px; border-bottom:1px solid var(--line-2,#eef1f6); font-size:14px; }
+  .calc .rowx:last-child{ border-bottom:none; }
+  .calc .rowx .l{ color:var(--ink); font-weight:600; } .calc .rowx .v{ font-weight:800; color:var(--ink); }
+  .calc .rowx.free .v{ color:var(--good); } .calc .ex{ background:var(--soft); padding:12px 16px; font-size:13.5px; color:var(--ink-2); line-height:1.5; }
+  .calc .ex b{ color:var(--ink); }
+
+  .lead-list{ list-style:none; display:flex; flex-direction:column; gap:15px; }
+  .lead-list li{ display:flex; gap:14px; align-items:flex-start; }
+  .lead-list .tx h4{ font-size:17px; font-weight:700; margin-bottom:2px; } .lead-list .tx p{ font-size:14px; color:var(--muted); line-height:1.45; }
+  .stat-strip{ display:flex; gap:36px; } .stat .n{ font-size:24px; font-weight:800; letter-spacing:-.02em; } .stat .l{ font-size:12.5px; color:var(--muted); margin-top:2px; } .slide--dark .stat .l{ color:#A9B2C4; }
+  .punch{ border-radius:16px; padding:18px 20px; display:flex; align-items:center; gap:15px; } .punch p{ font-size:17px; font-weight:600; line-height:1.4; }
+  .cover-route{ position:absolute; inset:0; opacity:.5; }
+  .badge-soft{ display:inline-flex; gap:8px; align-items:center; padding:8px 14px; border-radius:10px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); font-size:13px; color:#C5CCDA; }
+  .divider{ height:1px; background:var(--line); } .slide--dark .divider{ background:rgba(255,255,255,.14); }
+  .steps4{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .stepc{ display:flex; flex-direction:column; gap:10px; } .stepc .h{ display:flex; align-items:center; gap:11px; } .stepc h5{ font-size:16px; font-weight:700; } .stepc p{ font-size:13.5px; color:var(--muted); line-height:1.45; }
+
+  @media screen{
+    body{ padding:74px 0 60px; }
+    .slide{ margin:0 auto 30px; border-radius:8px; box-shadow:0 18px 50px rgba(0,0,0,.45); }
+    .toolbar{ position:fixed; top:0; left:0; right:0; z-index:50; background:rgba(14,23,38,.92); backdrop-filter:blur(8px); color:#fff; font-size:13px; padding:10px 18px; display:flex; gap:16px; align-items:center; border-bottom:1px solid rgba(255,255,255,.1); }
+    .toolbar b{ color:var(--accent); } .toolbar span{ color:#C5CCDA; }
+  }
+  @page{ size:1280px 720px; margin:0; }
+  @media print{
+    html,body{ background:#fff; } body{ padding:0; }
+    .toolbar{ display:none !important; }
+    .slide{ margin:0; border-radius:0; box-shadow:none; page-break-after:always; break-after:page; }
+    .slide:last-child{ page-break-after:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <b>▶ Modo de edição</b>
+  <span>Exportar: <b>Ctrl/Cmd + P</b> → Salvar como PDF · <b>Paisagem</b> · Margens <b>Nenhuma</b> · ativar <b>Gráficos de plano de fundo</b>.</span>
+</div>
+
+<div class="deck">
+
+  <!-- ===== 01 — CAPA ===== -->
+  <section class="slide slide--dark">
+    <svg class="cover-route" viewBox="0 0 1280 720" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M-40 600 C 220 600, 260 380, 480 380 S 760 180, 1000 180 1340 120 1340 120" fill="none" stroke="rgba(244,169,0,.22)" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+      <circle cx="480" cy="380" r="5" fill="#F4A900"/><circle cx="1000" cy="180" r="5" fill="#F4A900"/>
+    </svg>
+    <div class="col grow center" style="gap:24px; position:relative;">
+      <div class="eyebrow">Proposta · App de acompanhamento</div>
+      <h1 class="display" style="max-width:930px;">Um app pra sua empresa de ônibus: a família <span class="accent-text">acompanha a viagem do aluno.</span></h1>
+      <p class="s-lead" style="max-width:700px;">A família vê os avisos e o trajeto pelo celular. Menos gente batendo no seu administrativo, mais segurança e um serviço que se destaca.</p>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · Tecnologia &amp; Sistemas</span><span class="pg">Junho de 2026</span></div>
+  </section>
+
+  <!-- ===== 02 — ABERTURA / PROBLEMA ===== -->
+  <section class="slide slide--dark">
+    <div class="eyebrow">O ponto de partida</div>
+    <div class="col grow center gap-m">
+      <h2 class="display-sm" style="max-width:1000px; font-size:46px; line-height:1.14;">A família quer saber do aluno. Quando ela não tem como, a dúvida vira reclamação.</h2>
+      <p class="s-lead" style="font-size:23px; color:#fff; max-width:880px;">E a reclamação chega <span class="accent-text">no seu administrativo.</span></p>
+      <p class="s-lead" style="max-width:740px;">Hoje, a única forma de a família saber onde o ônibus está é falar com alguém da sua equipe.</p>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">02 / 15</span></div>
+  </section>
+
+  <!-- ===== 03 — O PROBLEMA (CARDS) ===== -->
+  <section class="slide">
+    <div class="eyebrow">O problema</div>
+    <h2 class="s-title mt-s" style="max-width:820px;">A viagem é <span class="hl">invisível</span> pra quem está de fora.</h2>
+    <div class="grid-2 mt-m grow" style="align-content:start;">
+      <div class="card">
+        <div class="ico bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><path d="M4 4l16 16"/></svg></div>
+        <h4>Família no escuro</h4>
+        <p>Ela não sabe se o ônibus saiu, onde está ou a que horas chega. Só descobre perguntando.</p>
+      </div>
+      <div class="card">
+        <div class="ico bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M9 9h6M9 13h4"/></svg></div>
+        <h4>A dúvida vira reclamação</h4>
+        <p>Sem informação, a família recorre ao seu administrativo — que para o que está fazendo pra responder.</p>
+      </div>
+      <div class="card">
+        <div class="ico bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h4>Atraso vira preocupação</h4>
+        <p>Qualquer imprevisto, sem um aviso, vira ansiedade da família e cobrança em cima de você.</p>
+      </div>
+      <div class="card">
+        <div class="ico bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 5c-5 0-9 4.5-10 7 1 2.5 5 7 10 7"/><path d="M22 12c-.5-1.2-1.4-2.5-2.6-3.6"/><path d="M3 3l18 18"/></svg></div>
+        <h4>Seu serviço não aparece</h4>
+        <p>Você cuida da operação, mas isso não vira diferencial nem cliente satisfeito. Some no anonimato.</p>
+      </div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">03 / 15</span></div>
+  </section>
+
+  <!-- ===== 04 — O QUE MUDA ===== -->
+  <section class="slide">
+    <div class="eyebrow">O que muda</div>
+    <h2 class="s-title mt-s">O mesmo serviço — <span class="hl">agora visível pra família.</span></h2>
+    <div class="grid-2 mt-m grow" style="align-content:start;">
+      <div class="card">
+        <div class="ico good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 19h2"/></svg></div>
+        <h4>A família acompanha sozinha</h4>
+        <p>Vê os avisos e o trajeto no próprio celular, sem precisar ligar pra ninguém.</p>
+      </div>
+      <div class="card">
+        <div class="ico good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m20 6-11 11-5-5"/></svg></div>
+        <h4>Menos reclamação no administrativo</h4>
+        <p>A informação chega pela tela. Sua equipe deixa de gastar o dia respondendo "cadê o ônibus".</p>
+      </div>
+      <div class="card">
+        <div class="ico good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg></div>
+        <h4>Mais segurança e tranquilidade</h4>
+        <p>Todo mundo sabe onde o ônibus está e quando chega. Imprevisto deixa de virar aflição.</p>
+      </div>
+      <div class="card">
+        <div class="ico good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg></div>
+        <h4>Seu serviço vira diferencial</h4>
+        <p>Uma empresa de ônibus com app próprio se destaca, passa confiança e segura o cliente.</p>
+      </div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">04 / 15</span></div>
+  </section>
+
+  <!-- ===== 05 — A SOLUÇÃO ===== -->
+  <section class="slide slide--brand">
+    <div class="eyebrow">A solução</div>
+    <div class="row grow" style="align-items:center; gap:50px;">
+      <div class="col gap-m" style="flex:1;">
+        <h2 class="display-sm" style="font-size:42px;">Um aplicativo <span class="accent-text">com a sua marca.</span></h2>
+        <p class="s-lead" style="font-size:19px;">A família acessa pelo celular, encontra a rota do aluno e acompanha a viagem — com avisos automáticos no caminho. Tudo com o nome e a cara da sua empresa.</p>
+        <div class="row gap-s mt-s" style="flex-wrap:wrap;">
+          <span class="pill">Sua marca</span>
+          <span class="pill">Avisos automáticos</span>
+          <span class="pill">Fácil de usar</span>
+          <span class="pill">Sem custo por aviso</span>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="app-top"><div class="app-brand"><span class="d"></span> [NOME DA EMPRESA]</div><div class="app-sub">Rota Centro · hoje</div></div>
+          <div class="app-notifs">
+            <div class="ntf"><div class="ni"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></div><div>O ônibus <b>saiu</b>.<span class="nt">06:42</span></div></div>
+            <div class="ntf amber hl"><div class="ni"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg></div><div>Passou no <b>seu ponto</b>. Chega em ~6 min.<span class="nt">06:54</span></div></div>
+            <div class="ntf good"><div class="ni"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="m20 6-11 11-5-5"/></svg></div><div><b>Chegou.</b> Bom dia!<span class="nt">07:01</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">05 / 15</span></div>
+  </section>
+
+  <!-- ===== 06 — COMO FUNCIONA (VISÃO GERAL) ===== -->
+  <section class="slide">
+    <div class="eyebrow">Como funciona pra família</div>
+    <h2 class="s-title mt-s">Quatro passos. <span class="hl">Sem complicação.</span></h2>
+    <div class="steps4 mt-l grow" style="align-content:center;">
+      <div class="stepc"><div class="h"><div class="step-num">1</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></div></div><h5>Abre o link</h5><p>No celular, sem baixar nada da loja de apps.</p></div>
+      <div class="stepc"><div class="h"><div class="step-num">2</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div></div><h5>Entra fácil</h5><p>Com o número de celular e o CPF como senha.</p></div>
+      <div class="stepc"><div class="h"><div class="step-num">3</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg></div></div><h5>Escolhe o ponto</h5><p>Onde ela quer ser avisada na chegada.</p></div>
+      <div class="stepc"><div class="h"><div class="step-num">4</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div></div><h5>Acompanha</h5><p>Recebe os avisos da viagem, sozinha.</p></div>
+    </div>
+    <div class="punch mt-m" style="background:var(--soft-2);">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg></div>
+      <p style="color:var(--ink);">Feito pra quem não tem intimidade com tecnologia: <b>nada de cadastro longo nem senha pra inventar.</b></p>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">06 / 15</span></div>
+  </section>
+
+  <!-- ===== 07 — FLUXO: ACESSO E LOGIN ===== -->
+  <section class="slide">
+    <div class="eyebrow">Passos 1 e 2 · Acesso</div>
+    <div class="row grow" style="align-items:center; gap:50px;">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="app-top"><div class="app-brand"><span class="d"></span> [NOME DA EMPRESA]</div><div class="app-sub">Entrar</div></div>
+          <div class="app-form">
+            <div class="ttl">Acompanhe a viagem</div>
+            <div class="fld"><span class="lb">Celular</span><span class="in ph">(22) 99999-9999</span></div>
+            <div class="fld"><span class="lb">Senha (seu CPF)</span><span class="in ph">000.000.000-00</span></div>
+            <div class="app-btn">Entrar</div>
+            <div class="app-hint">Sem cadastro. A empresa já deixou seu acesso pronto.</div>
+          </div>
+        </div>
+      </div>
+      <div class="col gap-m" style="flex:1;">
+        <h2 class="s-title">Entra em segundos, <span class="hl">do jeito mais simples.</span></h2>
+        <ul class="lead-list mt-s">
+          <li><div class="ico" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></div><div class="tx"><h4>Sem loja de apps</h4><p>A família abre um link no navegador do celular. Quem quiser, adiciona à tela inicial e vira um app.</p></div></li>
+          <li><div class="ico" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="tx"><h4>Login que todo mundo lembra</h4><p>Entra com o celular e o CPF como senha. Sem criar conta, sem e-mail de confirmação.</p></div></li>
+          <li><div class="ico" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="tx"><h4>Pré-cadastro pela empresa</h4><p>Você sobe a lista de alunos uma vez. A família só entra e acompanha.</p></div></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">07 / 15</span></div>
+  </section>
+
+  <!-- ===== 08 — FLUXO: ESCOLHER PONTO ===== -->
+  <section class="slide">
+    <div class="eyebrow">Passo 3 · Personalizar</div>
+    <div class="row grow" style="align-items:center; gap:50px;">
+      <div class="col gap-m" style="flex:1;">
+        <h2 class="s-title">A família escolhe <span class="hl">onde quer ser avisada.</span></h2>
+        <ul class="lead-list mt-s">
+          <li><div class="ico amber" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg></div><div class="tx"><h4>O ponto de referência é dela</h4><p>Perto de casa, no portão, no ponto de descida. Ela marca uma vez no mapa e pronto.</p></div></li>
+          <li><div class="ico amber" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="tx"><h4>Avisa na hora certa</h4><p>Quando o ônibus passa por aquele ponto, o aviso dispara. A mãe desce na hora, sem esperar na rua.</p></div></li>
+          <li><div class="ico amber" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div><div class="tx"><h4>Pode mudar quando quiser</h4><p>Mudou de endereço ou de rotina? Ela ajusta o ponto no app, sem falar com ninguém.</p></div></li>
+        </ul>
+      </div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="app-top"><div class="app-brand"><span class="d"></span> [NOME DA EMPRESA]</div><div class="app-sub">Onde te avisar?</div></div>
+          <div class="app-map">
+            <svg viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">
+              <rect width="240" height="320" fill="#DDE3EC"/>
+              <path d="M-10 90H260M-10 200H260" stroke="#CDD3DE" stroke-width="8"/>
+              <path d="M70 -10V330M160 -10V330" stroke="#CDD3DE" stroke-width="8"/>
+              <path d="M20 280 C 90 250, 80 150, 160 130 S 220 60, 230 40" fill="none" stroke="#1B4DD1" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+            <div class="pin"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg></div>
+          </div>
+          <div class="app-bar" style="display:flex; align-items:center; justify-content:space-between;">
+            <div><div class="pt">Seu ponto</div><div class="pv">Rua das Flores, 120</div></div>
+            <div class="app-btn" style="margin:0; padding:9px 14px;">Salvar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">08 / 15</span></div>
+  </section>
+
+  <!-- ===== 09 — FLUXO: ACOMPANHAR ===== -->
+  <section class="slide">
+    <div class="eyebrow">Passo 4 · Acompanhar</div>
+    <div class="row grow" style="align-items:center; gap:50px;">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="app-top"><div class="app-brand"><span class="d"></span> [NOME DA EMPRESA]</div><div class="app-sub">Avisos · hoje</div></div>
+          <div class="app-notifs">
+            <div class="ntf"><div class="ni"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></div><div>O ônibus <b>saiu</b>.<span class="nt">17:55</span></div></div>
+            <div class="ntf amber"><div class="ni"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/></svg></div><div>Passou no <b>seu ponto</b>. Chega em ~5 min.<span class="nt">18:30</span></div></div>
+            <div class="ntf good"><div class="ni"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="m20 6-11 11-5-5"/></svg></div><div><b>Chegou.</b> Boa noite!<span class="nt">18:35</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col gap-m" style="flex:1;">
+        <h2 class="s-title">Os avisos chegam <span class="hl">sozinhos.</span></h2>
+        <ul class="lead-list mt-s">
+          <li><div class="ico" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><div class="tx"><h4>Saiu, está chegando, chegou</h4><p>A família recebe os três avisos sem precisar perguntar nada pra ninguém.</p></div></li>
+          <li><div class="ico" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 2"/></svg></div><div class="tx"><h4>No nível completo, vê o ônibus no mapa</h4><p>Em tempo real, até o ponto. (Veja os dois níveis no próximo slide.)</p></div></li>
+          <li><div class="ico" style="width:38px;height:38px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="tx"><h4>Pra quem espera o aluno</h4><p>Pai, mãe ou outra pessoa da família acompanha pelo celular. Cada acesso vê só o aluno dele.</p></div></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">09 / 15</span></div>
+  </section>
+
+  <!-- ===== 10 — DOIS NÍVEIS ===== -->
+  <section class="slide">
+    <div class="eyebrow">Níveis</div>
+    <h2 class="s-title mt-s">Do simples ao completo. <span class="hl">Você escolhe.</span></h2>
+    <div class="grid-2 mt-m grow" style="align-content:center; gap:22px;">
+      <div class="opt rec">
+        <span class="tag good">Recomendado pra começar</span>
+        <h4>Avisos nos pontos certos</h4>
+        <div class="mini-notif">
+          <div class="r"><span class="b" style="background:var(--brand);"></span> O ônibus saiu</div>
+          <div class="r hl"><span class="b" style="background:var(--accent);"></span> Passou no ponto que a família escolhe</div>
+          <div class="r"><span class="b" style="background:var(--good);"></span> Chegou</div>
+        </div>
+        <p>Três avisos no momento certo. Simples, leve e funciona em qualquer celular. É por onde a maioria começa.</p>
+      </div>
+      <div class="opt">
+        <span class="tag neutral">Possibilidade · depois</span>
+        <h4>Acompanhamento no mapa</h4>
+        <div class="mini-map">
+          <svg viewBox="0 0 480 96" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;">
+            <rect width="480" height="96" fill="#DDE3EC"/>
+            <path d="M-10 28H490M-10 60H490" stroke="#CDD3DE" stroke-width="7"/><path d="M60 -10V110M170 -10V110M300 -10V110M410 -10V110" stroke="#CDD3DE" stroke-width="7"/>
+            <path d="M30 80 C 120 74, 150 36, 240 36 S 380 22, 440 16" fill="none" stroke="#1B4DD1" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="440" cy="16" r="8" fill="#fff" stroke="#15803D" stroke-width="4"/>
+            <g transform="translate(238,36)"><circle r="12" fill="#1B4DD1"/><path d="M-6 -3h12v7h-12z" stroke="#fff" stroke-width="1.6" fill="none"/></g>
+          </svg>
+          <span class="lbl">Ônibus a ~8 min</span>
+        </div>
+        <p>Mostrar o ônibus se mexendo no mapa, em tempo real, até o ponto. É uma possibilidade — validando o projeto e conhecendo melhor o rastreamento da frota, a gente expande pra cá.</p>
+      </div>
+    </div>
+    <p class="s-lead" style="font-size:14.5px; margin-top:16px;">A gente começa pelo <b style="color:var(--ink);">nível de avisos</b> — entrega o que importa, leve e barato. Validando o projeto e o rastreamento da frota, dá pra expandir pro mapa ao vivo.</p>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">10 / 15</span></div>
+  </section>
+
+  <!-- ===== 11 — CANAIS E CUSTO (WHATSAPP) ===== -->
+  <section class="slide">
+    <div class="eyebrow">Como o aviso chega</div>
+    <h2 class="s-title mt-s">O aviso pelo app é de graça. <span class="hl">E o WhatsApp, se você quiser.</span></h2>
+    <div class="grid-2 mt-l grow" style="align-content:center; gap:24px;">
+      <div class="card" style="border-color:#CBD9F7; padding:30px; gap:12px;">
+        <div class="ico" style="width:50px; height:50px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 19h2"/></svg></div>
+        <h4 style="font-size:21px;">Pelo app (push)</h4>
+        <div class="kpi" style="font-size:40px; color:var(--good);">R$ 0 <span style="font-size:17px; font-weight:700;">/ aviso</span></div>
+        <p style="font-size:15px;">Notificação no celular não tem tarifa. É o canal principal.</p>
+      </div>
+      <div class="card" style="padding:30px; gap:12px;">
+        <div class="ico good" style="width:50px; height:50px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21l1.6-4A8.5 8.5 0 1 1 12 20.5 8.4 8.4 0 0 1 7 19l-4 2Z"/></svg></div>
+        <h4 style="font-size:21px;">Pelo WhatsApp (possibilidade)</h4>
+        <div class="kpi" style="font-size:31px; color:var(--ink);">R$ 0,06 a R$ 0,58 <span style="font-size:16px; font-weight:700;">/ conversa</span></div>
+        <div style="font-size:13.5px; color:var(--muted); font-weight:600; margin-top:-4px;">de utilidade a marketing</div>
+        <p style="font-size:15px;">Reforço, ou pra quem não usar o app. Cobrança por conversa de 24h.</p>
+      </div>
+    </div>
+    <div style="font-size:11px; color:var(--muted-2); margin-top:14px;">Tarifas do WhatsApp Business (Meta) por conversa de 24h.</div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">11 / 15</span></div>
+  </section>
+
+  <!-- ===== 12 — SEGURANÇA E PRIVACIDADE ===== -->
+  <section class="slide">
+    <div class="eyebrow">Segurança e privacidade</div>
+    <h2 class="s-title mt-s">Dado de aluno é coisa séria — <span class="hl">e a gente trata assim.</span></h2>
+    <div class="grid-2 mt-m grow" style="align-content:center;">
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h4>Cada um vê só o que pode</h4><p>A família acompanha apenas o aluno dela. Nada fica aberto pra estranho.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Acesso controlado</h4><p>Não é cadastro aberto na internet. A família entra com os dados que a empresa já cadastrou.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><h4>Dados protegidos (LGPD)</h4><p>Acesso controlado e tráfego criptografado. Conforme a lei, desde o começo.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><h4>O dado não vira produto</h4><p>O app serve só pra acompanhar a viagem. Sem propaganda e sem repassar dados pra terceiros.</p></div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">12 / 15</span></div>
+  </section>
+
+  <!-- ===== 13 — POR QUE A GENTE ===== -->
+  <section class="slide">
+    <div class="eyebrow">Por que a Lone Mídia</div>
+    <h2 class="s-title mt-s">Temos a solução — <span class="hl">e o processo pra entregar.</span></h2>
+    <div class="grid-3 mt-l grow" style="align-content:center;">
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></div><h4>A solução já está desenhada</h4><p>Não é experimento. A tecnologia é conhecida e o caminho está definido — a gente sabe o que vai entregar.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4" cy="6" r="1.6"/><circle cx="4" cy="12" r="1.6"/><circle cx="4" cy="18" r="1.6"/></svg></div><h4>A gente entrega com processo</h4><p>Diagnóstico, piloto, ajustes e expansão. Cada etapa com começo, meio e fim — você sempre sabe onde o projeto está.</p></div>
+      <div class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h4>Um só responsável, perto de você</h4><p>App, instalação e suporte com a mesma empresa, falando direto com quem faz. Sem jogo de empurra.</p></div>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">13 / 15</span></div>
+  </section>
+
+  <!-- ===== 14 — COMO COMEÇA ===== -->
+  <section class="slide">
+    <div class="eyebrow">O caminho</div>
+    <h2 class="s-title mt-s">A gente começa por <span class="hl">uma rota só.</span></h2>
+    <p class="s-lead mt-s" style="max-width:800px;">A gente coloca o app numa rota, vê o resultado e depois amplia para o restante da frota.</p>
+    <div class="tl mt-l grow" style="align-content:center; align-items:start;">
+      <div class="ln"></div>
+      <div class="ph"><div class="dot"></div><div class="when">Etapa 1</div><h5>Entender a frota</h5><p>Olhamos como o rastreamento funciona hoje e definimos o melhor caminho.</p></div>
+      <div class="ph amber"><div class="dot"></div><div class="when">Etapa 2</div><h5>Piloto numa rota</h5><p>App no ar, avisos ativos e famílias acompanhando de verdade.</p></div>
+      <div class="ph"><div class="dot"></div><div class="when">Etapa 3</div><h5>Ajustes</h5><p>Afinamos avisos, pontos e telas com base no uso real.</p></div>
+      <div class="ph"><div class="dot"></div><div class="when">Etapa 4</div><h5>Expansão</h5><p>Levamos pra frota toda, com o app já no nome da sua empresa.</p></div>
+    </div>
+    <div class="punch mt-m" style="background:var(--good-soft);">
+      <div class="ico good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+      <p style="color:var(--ink);">Você só amplia <span style="color:var(--good);">depois de ver funcionando.</span></p>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · App de acompanhamento</span><span class="pg">14 / 15</span></div>
+  </section>
+
+  <!-- ===== 15 — CTA ===== -->
+  <section class="slide slide--dark">
+    <div class="eyebrow">Próximo passo</div>
+    <div class="col grow center gap-m">
+      <h2 class="display" style="font-size:48px; max-width:920px;">Vamos colocar <span class="accent-text">uma rota no ar.</span></h2>
+      <p class="s-lead" style="font-size:20px; color:#C5CCDA; max-width:780px;">A gente entende sua operação e coloca o app pra funcionar em uma rota. Você vê as famílias acompanhando — e menos gente batendo no seu administrativo.</p>
+      <div class="stat-strip mt-m">
+        <div class="stat"><div class="n accent-text">Sua marca</div><div class="l">O app leva o nome da sua empresa</div></div>
+        <div class="stat"><div class="n accent-text">Fácil de usar</div><div class="l">Entra com celular e CPF, sem complicação</div></div>
+        <div class="stat"><div class="n accent-text">Sem custo por aviso</div><div class="l">Pelo app, a notificação é gratuita</div></div>
+      </div>
+      <div class="divider mt-m" style="width:100%; max-width:780px;"></div>
+      <p style="font-size:22px; font-weight:700; color:#fff;">Uma empresa de ônibus que a família <span class="accent-text">acompanha pelo celular.</span></p>
+    </div>
+    <div class="foot"><span><b>Lone Mídia</b> · lonemidiamkt@gmail.com · (00) 00000-0000</span><span class="pg">15 / 15</span></div>
+  </section>
+
+</div>
+</body>
+</html>

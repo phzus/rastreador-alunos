@@ -1,0 +1,165 @@
+# Hook & Headline Formulas — Arsenal do @claudinho
+# 12 tipos de hook + 8 categorias de headline + scoring system
+# Uso: @claudinho — referência obrigatória para abertura de qualquer peça
+
+hooks:
+  core_principle: "Um hook tem 3 segundos para ganhar os próximos 30. Todo hook deve criar um gap entre o que o leitor sabe e o que ele quer saber."
+
+  the_12_hook_types:
+    - id: 1
+      type: "Contrarian"
+      formula: "[Crença comum] está errado. E eu vou provar."
+      best_for: [linkedin, youtube, artigos]
+      example_pt: "Tráfego pago não é o que faz um lançamento funcionar. Eu sei que parece loucura, mas olha esses números."
+
+    - id: 2
+      type: "Curiosity Gap"
+      formula: "Tem um motivo pelo qual [coisa surpreendente] e não é o que você imagina"
+      best_for: [youtube, blog, reels]
+      example_pt: "Tem um motivo pelo qual os melhores copywriters do Brasil não usam templates. E não é o que você pensa."
+
+    - id: 3
+      type: "Número Específico"
+      formula: "[Número] [coisas] que [resultado desejável]"
+      best_for: [carrosséis, listicles, instagram]
+      example_pt: "7 gatilhos mentais que transformam desconhecidos em compradores — em menos de 48h."
+
+    - id: 4
+      type: "Story Open"
+      formula: "[Mês/dia passado], eu [evento específico]..."
+      best_for: [email, youtube, long-form]
+      example_pt: "Em março do ano passado, eu perdi R$40 mil em um lançamento. E foi a melhor coisa que me aconteceu."
+
+    - id: 5
+      type: "Desafio Direto"
+      formula: "Pare de [erro comum]. Faça isso no lugar."
+      best_for: [reels, tiktok, twitter]
+      example_pt: "Pare de fazer live sem roteiro. Faça isso nos primeiros 3 minutos."
+
+    - id: 6
+      type: "Bold Claim"
+      formula: "Você pode [resultado impressionante] em [prazo curto]"
+      best_for: [páginas de vendas, ads]
+      example_pt: "Você pode montar um funil de R$100K em 7 dias — sem equipe, sem agência."
+
+    - id: 7
+      type: "Pergunta"
+      formula: "O que você faria se [cenário relatável]?"
+      best_for: [comunidade, email, enquetes]
+      example_pt: "E se você pudesse saber exatamente por que seu lead não comprou?"
+
+    - id: 8
+      type: "Before/After"
+      formula: "Eu saí de [estado ruim] para [estado bom] fazendo [método]"
+      best_for: [cases, transformação, depoimentos]
+      example_pt: "Saí de 0 a 2.347 alunos em 8 meses. E não gastei 1 real em tráfego pago."
+
+    - id: 9
+      type: "Prova Social"
+      formula: "[Número] [pessoas] já [fizeram coisa]. Veja o que aprenderam."
+      best_for: [landing pages, emails]
+      example_pt: "3.200 profissionais já aplicaram esse método. Aqui está o que mudou pra eles."
+
+    - id: 10
+      type: "Confissão"
+      formula: "Eu costumava [verdade constrangedora]. Até que descobri..."
+      best_for: [marca pessoal, newsletters]
+      example_pt: "Eu costumava copiar templates de email de guru americano. Até que perdi R$12 mil e entendi o problema."
+
+    - id: 11
+      type: "Urgência"
+      formula: "[Coisa] está mudando em [data]. Isso é o que você precisa saber."
+      best_for: [conteúdo time-sensitive, lançamentos]
+      example_pt: "O algoritmo do Instagram mudou ontem. E vai afetar 90% dos perfis comerciais."
+
+    - id: 12
+      type: "Pattern Interrupt"
+      formula: "[Declaração inesperada que parece não ter relação]"
+      best_for: [short-form video, tweets]
+      example_pt: "Eu comprei um carro usado semana passada. E isso me ensinou tudo sobre precificação de infoproduto."
+
+  workflow:
+    step_1: "Entender o conteúdo (tópico + formato + plataforma + audiência)"
+    step_2: "Gerar 5 hooks usando fórmulas diferentes da tabela"
+    step_3: "Ranquear por engajamento previsto e recomendar o #1"
+
+headlines:
+  core_principle: "Uma headline tem UM trabalho — ganhar o clique. Se não cria curiosidade, promete benefício ou gera emoção, falhou."
+
+  8_categories:
+    how_to:
+      formulas:
+        - "Como [resultado] sem [obstáculo]"
+        - "Como [resultado] em [prazo] (mesmo se [objeção])"
+        - "Como [pessoa específica] [alcançou resultado] — e como você pode também"
+
+    listicle:
+      formulas:
+        - "[N] [coisas] que [resultado] (a maioria erra na #[N])"
+        - "[N] [erros/mitos] sobre [tema] que estão te custando [perda]"
+        - "O sistema de [N] passos para [resultado desejado]"
+
+    question:
+      formulas:
+        - "Você está cometendo esses [N] erros de [tema]?"
+        - "E se [crença comum] estiver completamente errada?"
+        - "Por que [pessoas bem-sucedidas] sempre [fazem X]?"
+
+    curiosity_gap:
+      formulas:
+        - "O erro de [tema] que 90% de [audiência] comete (e a solução simples)"
+        - "Eu [fiz X] por [período]. Olha o que realmente aconteceu."
+        - "A verdade [adjetivo] sobre [tema] que ninguém fala"
+
+    benefit_driven:
+      formulas:
+        - "[Resultado] em [prazo] com este [método/ferramenta]"
+        - "Pare de [dor] — comece a [resultado] hoje"
+        - "O caminho mais rápido para [resultado] quando [situação comum]"
+
+    contrarian:
+      formulas:
+        - "Por que [conselho popular] está completamente errado (e o que fazer)"
+        - "[Prática popular] está matando seu [métrica]. Aqui está a prova."
+        - "Eu parei de [prática comum] e [resultado positivo] aconteceu"
+
+    social_proof:
+      formulas:
+        - "Como [N] [tipo de pessoa] [alcançaram resultado] usando [método]"
+        - "A estratégia que ajudou [pessoa/empresa] a [resultado específico]"
+        - "[N] [audiência] juram por essa [abordagem] — entenda por quê"
+
+    urgency:
+      formulas:
+        - "[Tema] está mudando em [ano] — como se preparar"
+        - "O guia [time-limited] para [resultado] antes de [deadline]"
+        - "Por que [tema] importa mais em [ano atual] do que nunca"
+
+  scoring:
+    criteria:
+      - name: "Clareza"
+        score: "1-5"
+        question: "O leitor entende instantaneamente o que vai ganhar?"
+      - name: "Curiosidade"
+        score: "1-5"
+        question: "Cria uma coceira que só é resolvida clicando?"
+      - name: "Especificidade"
+        score: "1-5"
+        question: "Inclui números, nomes ou detalhes concretos?"
+    top_5: "Marcar as 5 melhores headlines com justificativa"
+    ab_test: "Sugerir 2-3 pares A/B (how-to vs listicle, benefit vs curiosity)"
+
+  anti_patterns:
+    - "Clickbait sem substância — prometer drama que o conteúdo não entrega"
+    - "Keyword-first, leitor-segundo — SEO garbage"
+    - "Clever demais — trocadilhos que exigem contexto"
+    - "Headlines vagas — 'Reflexões sobre marketing' não diz nada"
+    - "Tudo na mesma fórmula — 25 how-to não dá variedade"
+    - "Ignorar limite de caracteres — headlines >70 chars são cortadas no Google"
+
+  regras_formato:
+    email_subject: "< 50 chars, sem CAPS LOCK, sem pontuação excessiva"
+    youtube: "< 60 chars, número + benefício"
+    facebook_ad: "< 40 chars headline, hook na primeira linha do primary text"
+    instagram: "Primeira linha do caption é o hook — precisa parar o scroll"
+    video_hook: "< 10 segundos quando falado, conversacional"

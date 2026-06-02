@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PROPOSTA TÉCNICA — Sistema de Acompanhamento de Transporte Universitário
+  Documento preto & branco, retrato, tamanho ofício (216 x 330 mm).
+  Companheiro técnico do deck de venda. Conteúdo VALIDADO pela pesquisa
+  (ver /docs/SOLUCAO-TECNICA.md e /docs/adr). Base técnica para o build.
+
+  EXPORTAR PDF: Ctrl/Cmd+P → Salvar como PDF → Retrato → Margens Nenhuma
+  → Tamanho do papel: Ofício/Legal (ou A4) → ativar "Gráficos de plano de fundo".
+  Para trocar p/ A4: no CSS, @page e .page → size/width: 210mm 297mm.
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta Técnica — Transporte Universitário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pw:216mm; --ph:330mm;
+    --ink:#111; --ink-2:#2a2a2a; --gray:#555; --gray-2:#777; --line:#cfcfcf; --line-2:#e6e6e6; --soft:#f4f4f4;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:#5a5d63; }
+  body{ font-family:'Hanken Grotesk','Segoe UI',system-ui,-apple-system,sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  .doc{ width:var(--pw); margin:0 auto; }
+  .page{ width:var(--pw); min-height:var(--ph); background:#fff; padding:20mm 19mm 16mm; position:relative; display:flex; flex-direction:column; }
+
+  /* cover */
+  .cover{ background:#0a0a0a; color:#fff; justify-content:flex-start; }
+  .cover .kick{ font-size:10pt; letter-spacing:.22em; text-transform:uppercase; color:#9a9a9a; margin-top:78mm; }
+  .cover h1{ font-size:30pt; font-weight:800; line-height:1.12; letter-spacing:-.01em; margin-top:8mm; max-width:150mm; }
+  .cover .sub{ font-size:12.5pt; color:#cfcfcf; margin-top:7mm; line-height:1.5; }
+  .cover .meta{ font-size:9.5pt; color:#8c8c8c; margin-top:64mm; line-height:1.7; border-top:1px solid #333; padding-top:6mm; }
+
+  /* section header bar (estilo do PDF original) */
+  .bar{ background:#0f0f0f; color:#fff; padding:7px 12px; font-size:12.5pt; font-weight:700; letter-spacing:.01em; }
+  h3{ font-size:11.5pt; font-weight:700; color:var(--ink); margin:14px 0 6px; }
+  h4{ font-size:10pt; font-weight:700; color:var(--ink-2); margin:11px 0 4px; }
+  p{ font-size:10pt; line-height:1.55; color:var(--ink-2); margin-bottom:7px; text-align:justify; }
+  .lead{ font-size:10.5pt; }
+  ul,ol{ margin:4px 0 9px 16px; } li{ font-size:10pt; line-height:1.5; color:var(--ink-2); margin-bottom:4px; }
+  b,strong{ color:var(--ink); font-weight:700; }
+  .muted{ color:var(--gray); } .small{ font-size:8.7pt; }
+  .note{ font-size:8.7pt; color:var(--gray); font-style:italic; line-height:1.45; border-left:2px solid var(--line); padding-left:9px; margin:8px 0; }
+
+  /* sumário */
+  .toc{ list-style:none; margin:8px 0 0; }
+  .toc li{ display:flex; align-items:baseline; gap:8px; padding:8px 0; border-bottom:1px solid var(--line-2); font-size:10.5pt; }
+  .toc .n{ font-weight:700; width:22px; color:var(--ink); }
+  .toc .t{ color:var(--ink-2); } .toc .pg{ margin-left:auto; color:var(--gray-2); font-size:9pt; }
+
+  /* tabelas */
+  table{ width:100%; border-collapse:collapse; margin:8px 0 10px; }
+  th{ background:#0f0f0f; color:#fff; font-size:8.7pt; font-weight:700; text-align:left; padding:7px 9px; letter-spacing:.02em; }
+  td{ border:1px solid var(--line); padding:7px 9px; font-size:9pt; line-height:1.4; color:var(--ink-2); vertical-align:top; }
+  tr:nth-child(even) td{ background:#fafafa; }
+  td b{ color:var(--ink); }
+
+  /* destaque / caixas */
+  .box{ border:1px solid var(--line); background:var(--soft); padding:11px 13px; margin:9px 0; }
+  .box h4{ margin-top:0; }
+  .kv{ display:flex; gap:0; border:1px solid var(--line); margin:9px 0; }
+  .kv .c{ flex:1; padding:10px 12px; border-right:1px solid var(--line); }
+  .kv .c:last-child{ border-right:none; }
+  .kv .lbl{ font-size:8pt; letter-spacing:.08em; text-transform:uppercase; color:var(--gray-2); font-weight:700; }
+  .kv .val{ font-size:14pt; font-weight:800; color:var(--ink); margin-top:3px; letter-spacing:-.01em; }
+  .kv .d{ font-size:8.5pt; color:var(--gray); margin-top:2px; line-height:1.35; }
+  .mono{ font-family:'Consolas','Courier New',monospace; font-size:8.5pt; background:#f4f4f4; border:1px solid var(--line); padding:9px 11px; line-height:1.55; color:#222; margin:8px 0; white-space:pre-wrap; }
+  .tag-rec{ display:inline-block; font-size:7.8pt; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:#0f0f0f; color:#fff; padding:2px 7px; border-radius:2px; vertical-align:middle; margin-left:6px; }
+
+  .flowline{ display:flex; align-items:stretch; gap:0; margin:10px 0; border:1px solid var(--line); }
+  .flowline .step{ flex:1; padding:10px; border-right:1px solid var(--line); text-align:center; }
+  .flowline .step:last-child{ border-right:none; }
+  .flowline .step .s-t{ font-size:9pt; font-weight:700; color:var(--ink); }
+  .flowline .step .s-d{ font-size:8pt; color:var(--gray); margin-top:3px; line-height:1.35; }
+
+  /* footer */
+  .foot{ margin-top:auto; border-top:1px solid var(--line); padding-top:7px; display:flex; justify-content:space-between; font-size:8pt; color:var(--gray-2); letter-spacing:.02em; }
+
+  @media screen{
+    body{ padding:26px 0 60px; }
+    .page{ margin:0 auto 22px; box-shadow:0 10px 34px rgba(0,0,0,.42); }
+    .toolbar{ position:fixed; top:0; left:0; right:0; z-index:50; background:#0f0f0f; color:#fff; font-size:12.5px; padding:9px 16px; border-bottom:1px solid #333; }
+    .toolbar b{ color:#fff; } body{ padding-top:66px; }
+  }
+  @page{ size:216mm 330mm; margin:0; }
+  @media print{
+    html,body{ background:#fff; } body{ padding:0; }
+    .toolbar{ display:none !important; }
+    .page{ margin:0; box-shadow:none; page-break-after:always; break-after:page; }
+    .page:last-child{ page-break-after:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">Exportar: <b>Ctrl/Cmd + P</b> → Salvar como PDF · <b>Retrato</b> · Papel <b>Ofício/Legal</b> (ou A4) · Margens <b>Nenhuma</b> · ativar <b>Gráficos de plano de fundo</b>.</div>
+
+<div class="doc">
+
+  <!-- ===== PÁG 1 — CAPA ===== -->
+  <section class="page cover">
+    <div class="kick">Proposta Técnica · Versão 1.0</div>
+    <h1>Sistema de Acompanhamento de Transporte Universitário</h1>
+    <div class="sub">Rastreamento por GPS e aplicativo de acompanhamento (white-label) para as famílias.<br>Documento técnico, arquitetura e plano de implantação.</div>
+    <div class="meta">
+      Preparado por Lone Mídia — Tecnologia &amp; Sistemas<br>
+      Para: [SUA TRANSPORTADORA] · Saquarema-RJ e região<br>
+      Junho de 2026
+    </div>
+  </section>
+
+  <!-- ===== PÁG 2 — SUMÁRIO ===== -->
+  <section class="page">
+    <div class="bar">Sumário</div>
+    <ol class="toc">
+      <li><span class="n">1.</span><span class="t">Apresentação e Escopo</span><span class="pg">pág. 3</span></li>
+      <li><span class="n">2.</span><span class="t">Diagnóstico do Sistema Atual</span><span class="pg">pág. 4</span></li>
+      <li><span class="n">3.</span><span class="t">Arquitetura Técnica da Solução</span><span class="pg">pág. 5</span></li>
+      <li><span class="n">4.</span><span class="t">Dois Níveis de Escopo (avisos e mapa ao vivo)</span><span class="pg">pág. 6</span></li>
+      <li><span class="n">5.</span><span class="t">Notificação, Canais e Custos</span><span class="pg">pág. 7</span></li>
+      <li><span class="n">6.</span><span class="t">Aplicativo e Painel de Gestão</span><span class="pg">pág. 8</span></li>
+      <li><span class="n">7.</span><span class="t">Privacidade e LGPD</span><span class="pg">pág. 9</span></li>
+      <li><span class="n">8.</span><span class="t">Infraestrutura e SLA</span><span class="pg">pág. 10</span></li>
+      <li><span class="n">9.</span><span class="t">Riscos Técnicos e Mitigações</span><span class="pg">pág. 11</span></li>
+      <li><span class="n">10.</span><span class="t">Cronograma de Implantação</span><span class="pg">pág. 12</span></li>
+      <li><span class="n">11.</span><span class="t">Considerações Finais</span><span class="pg">pág. 12</span></li>
+    </ol>
+    <div class="note">Este documento revisa e valida tecnicamente o rascunho inicial do projeto. As escolhas de arquitetura aqui descritas são a base para o desenvolvimento e estão sujeitas a ajuste após o diagnóstico técnico da frota (seção 2).</div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 2</span></div>
+  </section>
+
+  <!-- ===== PÁG 3 — APRESENTAÇÃO E ESCOPO ===== -->
+  <section class="page">
+    <div class="bar">1. Apresentação e Escopo</div>
+    <p class="lead">Este documento descreve a solução para acompanhamento do transporte universitário operado pela transportadora: um aplicativo, com a marca da empresa, em que a família acompanha as viagens do estudante, somado a um painel de gestão e relatórios para a operação e para o órgão contratante (prefeitura). O objetivo é tornar visível e comprovável um serviço que hoje acontece sem registro.</p>
+
+    <h3>O que está incluído</h3>
+    <ul>
+      <li>Captação da posição GPS dos veículos e processamento de eventos de rota (geofences).</li>
+      <li>Aplicativo da família (white-label) em dois níveis: avisos por evento e, opcionalmente, mapa ao vivo.</li>
+      <li>Notificação por push (canal principal), com WhatsApp e SMS como reforço.</li>
+      <li>Painel de gestão: rotas, veículos, histórico de viagens e relatórios.</li>
+      <li>Infraestrutura, monitoramento e SLA.</li>
+      <li>Diagnóstico técnico da frota como etapa inicial obrigatória.</li>
+    </ul>
+
+    <h3>Fora de escopo (fase inicial)</h3>
+    <ul>
+      <li>Bilhetagem, catraca ou controle de presença por leitor.</li>
+      <li>Integração com sistemas acadêmicos das instituições de ensino.</li>
+      <li>Substituição da frota. O hardware de rastreamento é tratado no diagnóstico (seção 2).</li>
+    </ul>
+
+    <div class="box">
+      <h4>Premissa revisada (importante)</h4>
+      <p style="margin-bottom:0;">O rascunho inicial assumia integração "não invasiva" com o rastreador já instalado, sem adicionar hardware. A pesquisa técnica mostrou que, no Brasil, plataformas de rastreamento fechadas raramente permitem acompanhamento em tempo real por terceiros. Por isso, o caminho para tempo real costuma exigir hardware próprio — detalhado nas seções 2 e 3. Isso não inviabiliza o projeto; apenas define corretamente o escopo e o custo.</p>
+    </div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 3</span></div>
+  </section>
+
+  <!-- ===== PÁG 4 — DIAGNÓSTICO ===== -->
+  <section class="page">
+    <div class="bar">2. Diagnóstico do Sistema Atual</div>
+    <p>Antes do desenvolvimento, é feito um levantamento do rastreamento em operação na frota. Essa etapa é obrigatória e define a estratégia de integração e o custo real.</p>
+
+    <h3>O que será levantado</h3>
+    <table>
+      <tr><th>Ponto</th><th>O que identificar</th><th>Impacto</th></tr>
+      <tr><td><b>Fabricante do rastreador</b></td><td>Teltonika, Suntech, Positron, Queclink, Concox ou outro</td><td>Define o protocolo e se o equipamento aceita destino próprio</td></tr>
+      <tr><td><b>Plataforma de monitoramento</b></td><td>Própria do fornecedor (ex.: Sascar, Omnilink) ou aberta</td><td>Define se há API/feed utilizável por terceiro</td></tr>
+      <tr><td><b>Acesso aos dados</b></td><td>API REST/webhook em tempo real, polling, ou nenhum</td><td>Define integração direta ou hardware próprio</td></tr>
+      <tr><td><b>Frequência de envio</b></td><td>Intervalo de posição (30 s, 1 min, etc.)</td><td>Precisão do evento de geofence e viabilidade do mapa ao vivo</td></tr>
+      <tr><td><b>Propriedade do equipamento</b></td><td>Próprio da transportadora ou em comodato</td><td>Define se é possível reconfigurar o destino do sinal</td></tr>
+    </table>
+
+    <h3>Dois cenários possíveis</h3>
+    <p><b>Cenário A — dados acessíveis.</b> Se a plataforma atual oferece API/webhook em tempo real, integramos a ela. Caminho mais rápido e sem hardware novo.</p>
+    <p><b>Cenário B — plataforma fechada ou sem tempo real.</b> Quando o equipamento é de comodato com chip/APN travado, ou a plataforma só libera dados por consulta (com atraso de minutos e limite de requisições), não há acompanhamento em tempo real confiável por terceiro. A solução é instalar rastreador próprio (ex.: Teltonika/Suntech) com chip M2M nosso, enviando para o nosso servidor.</p>
+    <div class="note">Plataformas fechadas comuns no mercado liberam dados apenas por consulta em lote, com latência da ordem de minutos e uma requisição por vez — adequado para gestão de frota, não para "o ônibus está chegando". Por isso o Cenário B é, na prática, o caminho para tempo real. O diagnóstico confirma qual cenário se aplica.</div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 4</span></div>
+  </section>
+
+  <!-- ===== PÁG 5 — ARQUITETURA ===== -->
+  <section class="page">
+    <div class="bar">3. Arquitetura Técnica da Solução</div>
+    <h3>Fluxo da informação</h3>
+    <div class="flowline">
+      <div class="step"><div class="s-t">Rastreador GPS</div><div class="s-d">No ônibus, envia posição por 4G</div></div>
+      <div class="step"><div class="s-t">Servidor de rastreamento</div><div class="s-d">Recebe posição, aplica geofences</div></div>
+      <div class="step"><div class="s-t">Backend de eventos</div><div class="s-d">Decide quem avisar e dispara</div></div>
+      <div class="step"><div class="s-t">App + reforços</div><div class="s-d">Push (grátis), WhatsApp, SMS</div></div>
+      <div class="step"><div class="s-t">Painel</div><div class="s-d">Gestão e relatórios</div></div>
+    </div>
+
+    <h3>Componente central: Traccar</h3>
+    <p>O Traccar é um servidor de rastreamento open-source (licença Apache 2.0, uso comercial livre) que suporta mais de 2.000 modelos de dispositivos. Recebe os dados do rastreador, processa geofences, gera eventos de entrada/saída e os encaminha por webhook. Disponibiliza API REST e WebSocket.</p>
+    <p>Em produção, duas decisões são obrigatórias para confiabilidade: usar <b>PostgreSQL</b> (nunca o banco H2 padrão, que corrompe) e tratar os eventos de geofence com <b>geometria de polígono e cálculo de proximidade no backend</b> (com filtro anti-duplicidade), em vez de confiar apenas no evento bruto — que pode falhar quando o intervalo entre posições é alto.</p>
+
+    <h3>Backend de notificação</h3>
+    <p>O caminho crítico (receber evento → consultar quem avisar → entregar) é feito por um serviço próprio em Node.js com fila, e não por ferramenta de automação genérica de fluxo único — que perde eventos sob pico. A fila garante reprocessamento e idempotência: ninguém deixa de ser avisado por uma falha momentânea.</p>
+
+    <h3>Stack resumida</h3>
+    <table>
+      <tr><th>Camada</th><th>Tecnologia</th><th>Licença / custo</th></tr>
+      <tr><td>Rastreamento</td><td>Traccar Server</td><td>Apache 2.0 (gratuito)</td></tr>
+      <tr><td>Backend de eventos</td><td>Node.js + fila (Redis)</td><td>Open source</td></tr>
+      <tr><td>Banco de dados</td><td>PostgreSQL</td><td>Open source</td></tr>
+      <tr><td>App da família</td><td>PWA / Capacitor + push (FCM)</td><td>FCM gratuito</td></tr>
+      <tr><td>Painel de gestão</td><td>Next.js</td><td>Open source</td></tr>
+      <tr><td>Infraestrutura</td><td>VPS Linux + Docker + Nginx/SSL</td><td>Custo mensal fixo</td></tr>
+    </table>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 5</span></div>
+  </section>
+
+  <!-- ===== PÁG 6 — DOIS NÍVEIS DE ESCOPO ===== -->
+  <section class="page">
+    <div class="bar">4. Dois Níveis de Escopo</div>
+    <p class="lead">A solução é entregue em dois níveis. Recomenda-se começar pelo Nível 1, que entrega o essencial com custo baixo e alta confiabilidade. O Nível 2 é uma evolução natural.</p>
+
+    <h3>Nível 1 — Avisos por evento <span class="tag-rec">Recomendado para começar</span></h3>
+    <p>A família é avisada em três momentos da viagem: quando o ônibus <b>sai</b>, quando <b>passa por um ponto de referência que ela mesma escolhe</b> no app (por exemplo, perto de casa) e quando <b>chega</b> ao destino. Funciona por geofence + push, com posição a cada 30–60 s — suficiente e robusto.</p>
+
+    <h3>Nível 2 — Acompanhamento ao vivo</h3>
+    <p>Além dos avisos, a família vê o ônibus se deslocando no mapa em tempo real. Exige posição a cada 10–15 s, transmissão ao vivo (WebSocket) e, em geral, hardware próprio para garantir a frequência. Mais completo e mais caro de operar.</p>
+
+    <table>
+      <tr><th>Critério</th><th>Nível 1 — Avisos</th><th>Nível 2 — Mapa ao vivo</th></tr>
+      <tr><td><b>Experiência</b></td><td>3 avisos no momento certo</td><td>Avisos + ônibus no mapa em tempo real</td></tr>
+      <tr><td><b>Frequência de GPS</b></td><td>30–60 s</td><td>10–15 s</td></tr>
+      <tr><td><b>Requer hardware próprio?</b></td><td>Não necessariamente</td><td>Em geral, sim</td></tr>
+      <tr><td><b>Custo de operação</b></td><td>Baixo</td><td>Médio</td></tr>
+      <tr><td><b>Confiabilidade</b></td><td>Alta</td><td>Alta (depende de sinal)</td></tr>
+      <tr><td><b>Indicação</b></td><td>MVP / piloto / maioria dos casos</td><td>Contratos maiores / fase 2</td></tr>
+    </table>
+    <div class="note">A precisão do evento depende da matemática do GPS: a 60 km/h, o veículo percorre ~1 km por minuto. Por isso, no Nível 1, os pontos de geofence usam raio generoso e o backend confirma por proximidade. No Nível 2, a frequência maior (10–15 s) é o que viabiliza o mapa fluido — e ela só é garantida com controle do equipamento.</div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 6</span></div>
+  </section>
+
+  <!-- ===== PÁG 7 — NOTIFICAÇÃO E CUSTOS ===== -->
+  <section class="page">
+    <div class="bar">5. Notificação, Canais e Custos</div>
+    <p>O canal principal é a <b>notificação push do aplicativo</b>, gratuita e ilimitada (Firebase Cloud Messaging). WhatsApp e SMS entram como reforço para o aviso crítico, garantindo entrega mesmo a quem não instalou o app.</p>
+
+    <table>
+      <tr><th>Canal</th><th>Custo por aviso</th><th>Papel</th></tr>
+      <tr><td><b>App (push / FCM)</b></td><td>≈ R$ 0 (gratuito)</td><td>Principal</td></tr>
+      <tr><td><b>WhatsApp (oficial, utilidade)</b></td><td>~R$ 0,04–0,07</td><td>Reforço / fallback</td></tr>
+      <tr><td><b>SMS</b></td><td>~R$ 0,08–0,33</td><td>Último recurso</td></tr>
+      <tr><td><b>WhatsApp não-oficial (Evolution)</b></td><td>Sem tarifa, mas risco de bloqueio</td><td>Descartado em produção</td></tr>
+    </table>
+
+    <h3>Por que o app como canal principal</h3>
+    <p>Cobrar por mensagem encarece a cada aluno e a cada viagem. Em escala, notificar tudo por WhatsApp oficial torna-se um custo recorrente relevante. O push elimina esse custo variável: paga-se apenas a infraestrutura, que é fixa.</p>
+
+    <div class="kv">
+      <div class="c"><div class="lbl">Tudo por WhatsApp oficial</div><div class="val">~R$ 50 mil / ano</div><div class="d">A cada 1.000 alunos, só em mensagens.</div></div>
+      <div class="c"><div class="lbl">App + push</div><div class="val">≈ R$ 0 / aviso</div><div class="d">Apenas o custo fixo do servidor.</div></div>
+    </div>
+    <div class="note">Cenário ilustrativo: ~4 avisos por aluno/dia, 200 dias letivos, preço de mensagem da categoria "utilidade" do WhatsApp Business Platform (Meta), Brasil, 2025–2026. O WhatsApp não-oficial (via WhatsApp Web) foi descartado para uso institucional pelo risco real de bloqueio do número e interrupção total do serviço.</div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 7</span></div>
+  </section>
+
+  <!-- ===== PÁG 8 — APP E PAINEL ===== -->
+  <section class="page">
+    <div class="bar">6. Aplicativo e Painel de Gestão</div>
+    <h3>Aplicativo da família (white-label)</h3>
+    <p>Publicado com o nome, a logo e a identidade da transportadora. Quem usa não vê marca de terceiro. Funções principais:</p>
+    <ul>
+      <li>Vínculo com a rota do estudante (a família escolhe a rota e o ponto de referência).</li>
+      <li>Avisos automáticos da viagem (saída, ponto escolhido, chegada).</li>
+      <li>No Nível 2, mapa ao vivo do ônibus até o ponto.</li>
+      <li>Histórico das viagens.</li>
+      <li>Quem acompanha é definido pelo próprio estudante (pai, mãe, ou outro).</li>
+    </ul>
+
+    <h3>Painel de gestão (operação)</h3>
+    <table>
+      <tr><th>Módulo</th><th>Função</th></tr>
+      <tr><td><b>Frota e rotas</b></td><td>Cadastro de veículos, rotas, pontos e horários; vínculo veículo–rota</td></tr>
+      <tr><td><b>Estudantes e responsáveis</b></td><td>Cadastro, vínculo com rota e gestão de quem recebe avisos</td></tr>
+      <tr><td><b>Pontos de aviso</b></td><td>Definição visual das zonas no mapa e do tipo de evento</td></tr>
+      <tr><td><b>Histórico e relatórios</b></td><td>Registro de cada viagem; relatórios de rota cumprida e frequência (para a prefeitura)</td></tr>
+      <tr><td><b>Mapa da frota</b></td><td>Posição atual dos veículos (acesso restrito à gestão)</td></tr>
+    </table>
+    <p>Os relatórios são o que dá à transportadora como comprovar o serviço ao órgão contratante — rota cumprida, horários e frequência, em documento exportável.</p>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 8</span></div>
+  </section>
+
+  <!-- ===== PÁG 9 — LGPD ===== -->
+  <section class="page">
+    <div class="bar">7. Privacidade e LGPD</div>
+    <p>O sistema trata dado de localização e de identificação de pessoas, sujeito à Lei Geral de Proteção de Dados (LGPD). Como os estudantes são maiores de idade, o consentimento é direto e simples de obter.</p>
+    <table>
+      <tr><th>Princípio</th><th>Como é tratado</th></tr>
+      <tr><td><b>Consentimento</b></td><td>O estudante autoriza explicitamente quem pode acompanhar suas viagens</td></tr>
+      <tr><td><b>Minimização</b></td><td>No Nível 1, a família recebe eventos (saiu/chegou), não a posição contínua</td></tr>
+      <tr><td><b>Acesso controlado</b></td><td>Cada pessoa vê apenas o que foi autorizada a ver; gestão com acesso separado</td></tr>
+      <tr><td><b>Segurança</b></td><td>Tráfego criptografado (HTTPS/SSL), dados no servidor do contrato</td></tr>
+      <tr><td><b>Retenção</b></td><td>Histórico com prazo definido e descarte programado</td></tr>
+    </table>
+    <div class="box">
+      <h4>Vantagem de conformidade</h4>
+      <p style="margin-bottom:0;">Tratar a privacidade corretamente não é só obrigação legal — é argumento. Uma operação que demonstra cuidado com dados se diferencia perante a prefeitura e remove um bloqueio jurídico comum em contratos públicos.</p>
+    </div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 9</span></div>
+  </section>
+
+  <!-- ===== PÁG 10 — INFRA E SLA ===== -->
+  <section class="page">
+    <div class="bar">8. Infraestrutura e SLA</div>
+    <h3>Arquitetura de servidor</h3>
+    <p>Todos os serviços rodam em VPS Linux via Docker, com proxy reverso e SSL. A carga é baixa: uma frota de ~150 veículos enviando posição a cada 30–60 s gera poucos eventos por segundo.</p>
+    <div class="mono">traccar      → recepção GPS + geofences + webhook
+backend      → eventos, fila e disparo de notificações
+postgres     → banco de dados
+app-api      → API do aplicativo e do painel
+nginx        → proxy reverso + SSL (Let's Encrypt)</div>
+    <p>Dimensionamento de referência: 4 GB de RAM e 2–4 vCPU atendem a frota com folga. O custo de infraestrutura é fixo e baixo, e não cresce de forma relevante com o número de alunos.</p>
+
+    <h3>Compromissos de SLA</h3>
+    <table>
+      <tr><th>Métrica</th><th>Meta</th></tr>
+      <tr><td>Disponibilidade do sistema</td><td>99,5% ao mês</td></tr>
+      <tr><td>Latência do aviso após o evento de GPS</td><td>&lt; 60 segundos</td></tr>
+      <tr><td>Backup de dados</td><td>Diário, com retenção definida</td></tr>
+      <tr><td>Suporte a incidentes críticos</td><td>Resposta em até 4 h em dias úteis</td></tr>
+      <tr><td>Cadastros (rotas, estudantes)</td><td>Autogerenciados pela operação no painel</td></tr>
+    </table>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 10</span></div>
+  </section>
+
+  <!-- ===== PÁG 11 — RISCOS ===== -->
+  <section class="page">
+    <div class="bar">9. Riscos Técnicos e Mitigações</div>
+    <p>Apresentamos os riscos abertamente — é o que separa uma proposta séria de uma promessa vazia.</p>
+    <table>
+      <tr><th>Risco</th><th>Por que existe</th><th>Mitigação</th></tr>
+      <tr><td><b>Integração com rastreador fechado</b></td><td>Plataformas fechadas e chips travados impedem tempo real por terceiros</td><td>Diagnóstico primeiro; onde necessário, instalar rastreador próprio com chip M2M nosso</td></tr>
+      <tr><td><b>Evento de geofence não disparar</b></td><td>Intervalo alto entre posições pode "pular" a zona; eventos duplicados</td><td>Geofence em polígono, raio generoso, cálculo de proximidade e filtro anti-duplicidade no backend</td></tr>
+      <tr><td><b>Aviso não chegar ao celular</b></td><td>Push pode falhar (iOS sem instalar, Android que encerra o app)</td><td>App em formato nativo (Capacitor) e reforço por WhatsApp/SMS no aviso crítico</td></tr>
+      <tr><td><b>Perda de evento sob pico</b></td><td>Vários ônibus cruzando zonas no mesmo horário</td><td>Fila com reprocessamento e idempotência; monitoramento de "veículo sem sinal"</td></tr>
+      <tr><td><b>Sinal 4G fraco na rota</b></td><td>Trechos sem cobertura, comuns em rota intermunicipal</td><td>Buffer no rastreador (envia ao recuperar sinal) e tolerância no cálculo de chegada</td></tr>
+    </table>
+    <div class="note">A confirmação definitiva de cada risco e do esforço de mitigação depende do diagnóstico da frota (seção 2). Nenhum desses riscos inviabiliza o projeto; todos têm caminho de solução conhecido.</div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 11</span></div>
+  </section>
+
+  <!-- ===== PÁG 12 — CRONOGRAMA + FINAIS ===== -->
+  <section class="page">
+    <div class="bar">10. Cronograma de Implantação</div>
+    <p>Implantação em fases, começando por uma rota. Duração total estimada de ~8 semanas a partir do início, com expansão após a validação do piloto.</p>
+    <table>
+      <tr><th>Fase</th><th>Prazo</th><th>Entregas</th></tr>
+      <tr><td><b>0 · Diagnóstico</b></td><td>Sem. 1–2</td><td>Levantamento da frota e do rastreamento; definição do cenário (A ou B); setup do servidor</td></tr>
+      <tr><td><b>1 · Piloto</b></td><td>Sem. 3–4</td><td>Uma rota com app no ar (Nível 1); geofences; avisos ativos; famílias acompanhando</td></tr>
+      <tr><td><b>2 · Ajustes</b></td><td>Sem. 5–6</td><td>Refino de pontos, avisos e telas a partir do uso real; painel e relatórios</td></tr>
+      <tr><td><b>3 · Expansão</b></td><td>Sem. 7–8+</td><td>Rollout para a frota; publicação do app nas lojas com a marca da transportadora</td></tr>
+    </table>
+
+    <div class="bar" style="margin-top:14px;">11. Considerações Finais</div>
+    <p>O caminho recomendado é começar pelo Nível 1 (avisos por evento), usando integração quando a frota permitir e hardware próprio onde for necessário para garantir confiabilidade. É a opção mais custo-eficiente, honesta quanto à integração e pronta para crescer até o acompanhamento ao vivo.</p>
+    <p>A solução usa tecnologias open-source consolidadas, sem licença por veículo, com o aplicativo e os dados sob a marca e o controle da transportadora. Esta proposta está sujeita a revisão após o diagnóstico técnico da frota.</p>
+    <div class="note" style="margin-top:14px;">Documento elaborado por Lone Mídia · Junho de 2026 · Versão 1.0. Os valores e prazos são estimativas de referência e serão consolidados após o diagnóstico.</div>
+    <div class="foot"><span>Proposta Técnica — Transporte Universitário</span><span>Pág. 12</span></div>
+  </section>
+
+</div>
+</body>
+</html>

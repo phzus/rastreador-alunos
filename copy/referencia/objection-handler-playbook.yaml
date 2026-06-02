@@ -1,0 +1,125 @@
+# Objection Handler Playbook — Arsenal da @andreza
+# Framework LAER + playbook por categoria + scripts reais
+# Uso: @andreza, @danilo — referência para calls de venda e qualificação
+
+core_principle: "Objeções NÃO são rejeições — são pedidos de mais informação. O objetivo é entender a preocupação, não 'superar' a pessoa."
+
+framework_laer:
+  name: "LAER (Listen-Acknowledge-Explore-Respond)"
+  steps:
+    - step: "Listen"
+      rule: "Deixar terminar. Não interromper. Não pular para resposta."
+      tecnica: "Silêncio estratégico — 3 segundos após a pessoa terminar"
+    - step: "Acknowledge"
+      rule: "Validar com empatia genuína."
+      frases:
+        - "Faz total sentido."
+        - "Entendo completamente."
+        - "É uma preocupação legítima."
+        - "Agradeço por ser honesto(a) comigo."
+    - step: "Explore"
+      rule: "Perguntar para entender a preocupação REAL (nem sempre é o que dizem)."
+      frases:
+        - "Posso te perguntar — quando você fala X, é mais por A ou por B?"
+        - "Me ajuda a entender melhor — o que te preocupa mais nisso?"
+        - "Se eu conseguisse resolver X, isso mudaria sua decisão?"
+    - step: "Respond"
+      rule: "Responder à preocupação ESPECÍFICA com evidência, reframe ou prova social."
+      tipos:
+        - "Prova social: 'A Fulana estava exatamente na mesma situação...'"
+        - "Reframe: 'Olha por esse ângulo...'"
+        - "Dados: 'Os números mostram que...'"
+        - "Garantia: 'Por isso temos X dias de garantia...'"
+
+objection_categories:
+  - category: "PREÇO"
+    frequency: "60% de todas as objeções"
+    priority: "CRITICAL"
+    frases_comuns:
+      - "Tá caro"
+      - "Não posso pagar agora"
+      - "Achei mais barato em outro lugar"
+      - "Preciso ver se cabe no orçamento"
+    real_meaning: "Não estou convencido(a) de que o resultado vale esse investimento."
+    responses:
+      roi_concern:
+        acknowledge: "Entendo — [valor] é um investimento real e você precisa ter certeza que vale."
+        explore: "Me diz — quando você pensa no valor, é que o total parece alto, ou que você não tem certeza do retorno?"
+        respond: "Justo. Deixa eu te contar o que aconteceu com o [Cliente X] — situação parecida, investiu [valor], e em [prazo] já tinha [resultado concreto]. O investimento se pagou [N]x."
+      budget_concern:
+        acknowledge: "Ouço você. Ninguém quer se estender financeiramente."
+        explore: "Se tivesse uma condição que coubesse melhor no seu momento, faria sentido pra você?"
+        respond: "A gente tem parcelamento em [N]x de R$[valor] — sem juros. Prefiro que você entre no seu ritmo do que se forçar."
+      comparison:
+        respond: "Posso perguntar — o que você encontrou de diferente? Porque [diferencial específico] é algo que só a gente oferece."
+
+  - category: "TIMING"
+    frequency: "20% de todas as objeções"
+    priority: "HIGH"
+    frases_comuns:
+      - "Agora não é o melhor momento"
+      - "Talvez no próximo mês/semestre"
+      - "Tô muito ocupado(a)"
+      - "Preciso pensar"
+    real_meaning: "Algo está me impedindo mas não consigo ou não quero articular."
+    responses:
+      think_about_it:
+        acknowledge: "Claro — é uma decisão importante e você deve tomar o tempo que precisar."
+        explore: "Só pra eu te ajudar — quando você fala que quer pensar, tem alguma preocupação específica que eu posso esclarecer agora?"
+        if_shares: "[Endereçar a preocupação específica]"
+        if_vague: "Tranquilo. Vou te mandar um resumo por email com tudo que a gente conversou. Posso te ligar [dia] só pra trocar uma ideia rápida?"
+        second_pushback: "Entendi. Vou fazer follow-up em alguns dias — se for não, me diz sem problema nenhum."
+      busy:
+        respond: "Justamente por você estar ocupado(a) — [produto] foi feito pra [benefício que economiza tempo]. O [Cliente X] falou a mesma coisa e hoje [resultado]."
+
+  - category: "CONFIANÇA"
+    frequency: "10% de todas as objeções"
+    priority: "HIGH"
+    frases_comuns:
+      - "Como sei que funciona?"
+      - "Nunca ouvi falar de vocês"
+      - "Já comprei curso/produto parecido e não funcionou"
+    real_meaning: "Tenho medo de desperdiçar dinheiro de novo."
+    responses:
+      tried_before:
+        acknowledge: "Preocupação totalmente válida — e honestamente, a maioria dos [produtos similares] é ruim. Eu mesmo já caí em alguns."
+        explore: "O que aconteceu com os que você tentou? Foi o conteúdo, o formato, o suporte?"
+        respond: "A razão #1 de [produto similar] falhar é falta de [diferencial]. Por isso [produto] inclui [diferencial específico]. Se travar, tem [suporte/comunidade/mentoria]."
+      never_heard:
+        respond: "Normal — a gente não faz marketing pra ser famoso, faz pra entregar resultado. [Número] clientes, [resultado médio]. Posso te mostrar [prova específica]?"
+
+  - category: "NECESSIDADE"
+    frequency: "5% de todas as objeções"
+    priority: "MEDIUM"
+    frases_comuns:
+      - "Acho que não preciso disso"
+      - "Já tenho uma solução"
+    responses:
+      already_have:
+        acknowledge: "Ótimo que você já tem algo funcionando."
+        explore: "Como estão os resultados? Tá batendo as metas que definiu no começo do ano?"
+        respond: "Parece que [gap identificado] é exatamente onde a gente se especializa. Faz sentido eu te mostrar o que fizemos pra [cliente similar]?"
+
+  - category: "AUTORIDADE"
+    frequency: "5% de todas as objeções"
+    priority: "MEDIUM"
+    frases_comuns:
+      - "Preciso falar com meu sócio/chefe/esposa"
+      - "Não sou eu que decido"
+    responses:
+      need_approval:
+        acknowledge: "Faz total sentido — decisões assim precisam ser compartilhadas."
+        explore: "Posso perguntar — o que o [decisor] precisaria saber pra dizer sim?"
+        respond: "Posso preparar um resumo com exatamente esses pontos. E se fizer sentido, posso participar de uma conversa rápida com vocês dois?"
+
+graceful_exit:
+  rule: "Se a pessoa disser NÃO duas vezes, respeitar. Insistir mais é pressão."
+  script: "Sem problema nenhum. Se mudar de ideia, a porta tá aberta. Vou te mandar um resumo por email pra ter tudo registrado."
+
+anti_patterns:
+  - "NUNCA usar táticas manipulativas — sem urgência falsa, culpa ou pressão"
+  - "Toda resposta começa com empatia, não com rebuttal"
+  - "Sempre ter saída graciosa — se disser não 2x, respeitar"
+  - "Respostas devem soar naturais quando faladas em voz alta"
+  - "Reconhecer quando objeção é válida — nem toda preocupação pode ser 'resolvida'"
+  - "NUNCA mentir sobre resultados ou fabricar depoimentos"

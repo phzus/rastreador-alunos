@@ -1,0 +1,10 @@
+# Artefatos de verificação (screenshots usados só para conferir o layout)
+full.png
+proposta-full.png
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Node (caso o build use no futuro)
+node_modules/
