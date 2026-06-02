@@ -31,6 +31,12 @@ Sessão de fundação do projeto (pré-venda).
 ### Repositório
 - Projeto versionado em git e vinculado a **https://github.com/phzus/rastreador-alunos** (branch `main`). Commit inicial com deck, proposta técnica, PDFs, motor de copy e docs. Screenshots de verificação ignorados via `.gitignore`.
 
+### Protótipo navegável + skill de UI
+- Instalada a skill **ui-ux-pro-max** (repo nextlevelbuilder, pacote com 7 skills) em `.claude/skills/`. Usada para construir o protótipo. (Só vira invocável via `/skill` na próxima sessão.)
+- Criado `prototipo/index.html`: app de acompanhamento navegável (telas Login, Início, Mapa com ônibus animado, Avisos, Perfil; bottom tab bar; animações/micro-interações; deep-link por hash). No desktop aparece **dentro de uma maquete de celular**; no mobile roda **full-screen como app**. Sem backend (estado fake).
+- Revisado por **workflow multi-agente (5 lentes)** contra a skill e corrigido: contraste de rótulos, alvos de toque 44px, focus-visible, touch-action, animações via transform/opacity, coerência da narrativa (home/timeline/mapa/avisos), direção do ônibus, "voltar" do aparelho (pushState), aria-labels/Escape/aria-live. Login = **celular + CPF** (ver OPEN-QUESTIONS).
+- Deploy: subir a pasta `prototipo/` na Vercel como projeto estático.
+
 **Pendente**
 - Preencher placeholders (nome da empresa, telefone).
 - Decidir se a Proposta Técnica também é limpa de licitação/prefeitura (ver OPEN-QUESTIONS).

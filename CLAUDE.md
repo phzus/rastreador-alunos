@@ -27,7 +27,9 @@ Um aplicativo com a **marca da transportadora** onde a família (pai, mãe, namo
 | [apresentacao/apresentacao-saquarema.html](apresentacao/apresentacao-saquarema.html) | Deck de venda 16:9 (colorido), ângulo de negócio. Exporta PDF. |
 | [apresentacao/proposta-tecnica-saquarema.html](apresentacao/proposta-tecnica-saquarema.html) | Proposta técnica ofício retrato, P&B, validada. Companheiro técnico do deck. |
 | [copy/](copy/) | Motor de copy: BRIEFING-COPY, AVATAR, COMUNICACAO + referência (anti-IA, frameworks). |
+| [prototipo/](prototipo/) | Protótipo navegável do app (HTML estático; maquete no desktop, full-screen no mobile). Deploy na Vercel. |
 | [docs/](docs/) | Este segundo cérebro: escopo, solução técnica, decisões, progresso, pendências. |
+| `.claude/skills/` | Skill **ui-ux-pro-max** (+ pacote) instalada para o trabalho de UI. |
 
 PDFs gerados: `apresentacao/preview.pdf` (deck) e `apresentacao/proposta-tecnica.pdf`. Gere frescos antes de apresentar (instruções no rodapé de cada HTML).
 

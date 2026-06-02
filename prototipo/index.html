@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PROTÓTIPO NAVEGÁVEL — App de acompanhamento de transporte (white-label)
+  Para o cliente "sentir" o app. Sem backend: estado fake em JS.
+  Construído aplicando a skill ui-ux-pro-max (.claude/skills/ui-ux-pro-max):
+  touch >=44px, bottom-nav <=5 com icone+rotulo, animacoes 150-300ms
+  (transform/opacity), feedback de toque, safe-areas, icones SVG (sem emoji),
+  100dvh, deep-linking por hash, prefers-reduced-motion.
+
+  COMPORTAMENTO:
+  - No CELULAR: tela cheia, como app.
+  - No DESKTOP: dentro de uma maquete de celular.
+
+  DEPLOY (Vercel): suba a pasta /prototipo como projeto estatico (framework
+  "Other"). E so o index.html.
+
+  TROCAR A MARCA: variavel BRAND no <script> (e o monograma ".st" no topo).
+  ============================================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12317F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Acompanha">
+<title>Acompanhe a viagem — protótipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#1B4DD1; --brand-700:#12317F; --brand-50:#EAF0FE; --brand-100:#D8E3FC;
+    --accent:#F4A900; --accent-50:#FEF4D8;
+    --good:#16A34A; --good-50:#E7F6EC;
+    --danger:#DC2626; --danger-50:#FCEBEB;
+    --ink:#0E1726; --muted:#646B7A; --muted-2:#9AA1B1; --muted-3:#5A6273;
+    --line:#E7EAF1; --line-2:#EFF2F7;
+    --bg:#F3F5FA; --card:#FFFFFF;
+    --r-lg:22px; --r-md:16px; --r-sm:12px;
+    --shadow-1:0 1px 2px rgba(14,23,38,.05), 0 6px 16px -8px rgba(14,23,38,.10);
+    --shadow-2:0 10px 30px -10px rgba(14,23,38,.22);
+    --tabh:64px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --safe-t:env(safe-area-inset-top,0px);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+  html,body{ height:100%; overflow:hidden; }
+  body{
+    font-family:'Hanken Grotesk','Segoe UI',system-ui,-apple-system,sans-serif;
+    color:var(--ink); background:var(--bg);
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  button{ font:inherit; color:inherit; border:none; background:none; cursor:pointer; }
+  :focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .field input:focus-visible{ outline:none; }
+  svg{ display:block; }
+
+  /* ---------- STAGE (desktop backdrop) ---------- */
+  .stage{ height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .stage-caption{ display:none; }
+
+  /* ---------- DEVICE (maquete) ---------- */
+  .device{ width:100%; height:100dvh; position:relative; background:var(--bg); overflow:hidden; }
+  .island{ display:none; }
+
+  /* ---------- APP SHELL ---------- */
+  .app{ position:relative; height:100%; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); }
+  .statusbar{ display:none; }
+  .viewport{ position:relative; flex:1; overflow:hidden; }
+
+  /* ---------- SCREENS + TRANSITIONS ---------- */
+  .screen{
+    position:absolute; inset:0; overflow-y:auto; overflow-x:hidden;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+    opacity:0; transform:translateX(10px); pointer-events:none;
+    transition:opacity .26s var(--ease), transform .26s var(--ease);
+    padding:0 18px calc(var(--tabh) + var(--safe-b) + 18px);
+  }
+  .screen.is-active{ opacity:1; transform:none; pointer-events:auto; }
+  .screen::-webkit-scrollbar{ display:none; }
+  .screen[data-screen="login"]{ padding-bottom:24px; }
+  .app.no-tabs .viewport{ inset:0; }
+
+  /* ---------- TOP HEADER (inside screens) ---------- */
+  .head{ padding:calc(var(--safe-t) + 22px) 0 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; position:sticky; top:0; background:linear-gradient(var(--bg) 78%, rgba(243,245,250,0)); z-index:5; }
+  .head h1{ font-size:24px; font-weight:800; letter-spacing:-.02em; }
+  .head .sub{ font-size:13px; color:var(--muted); margin-top:2px; }
+  .icon-btn{ width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--card); box-shadow:var(--shadow-1); color:var(--ink); transition:transform .15s var(--ease); position:relative; }
+  .icon-btn:active{ transform:scale(.92); }
+  .icon-btn svg{ width:21px; height:21px; }
+
+  /* ---------- CARDS ---------- */
+  .card{ background:var(--card); border-radius:var(--r-lg); box-shadow:var(--shadow-1); padding:18px; }
+  .card + .card{ margin-top:14px; }
+
+  /* status hero card */
+  .status{ background:linear-gradient(150deg,var(--brand-700),var(--brand)); color:#fff; border-radius:var(--r-lg); padding:20px; position:relative; overflow:hidden; box-shadow:var(--shadow-2); }
+  .status::after{ content:""; position:absolute; right:-40px; top:-40px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,.08); }
+  .status .live{ display:inline-flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:rgba(255,255,255,.16); padding:5px 10px; border-radius:999px; }
+  .status .live .dot{ position:relative; width:7px; height:7px; border-radius:50%; background:#7CF2A8; }
+  .status .live .dot::after{ content:""; position:absolute; inset:0; border-radius:50%; background:#7CF2A8; animation:halo 1.8s ease-out infinite; }
+  .status .st-title{ font-size:23px; font-weight:800; letter-spacing:-.02em; margin-top:14px; }
+  .status .eta{ font-size:14px; color:#D7E1FA; margin-top:4px; }
+  .status .eta b{ color:#fff; font-variant-numeric:tabular-nums; }
+  .status .bus-illus{ position:absolute; right:16px; bottom:14px; opacity:.9; }
+  .status .bus-illus svg{ width:54px; height:54px; color:#fff; }
+
+  /* timeline (3 eventos) */
+  .timeline{ margin-top:6px; }
+  .tl-row{ display:flex; gap:14px; padding:4px 0; }
+  .tl-mark{ display:flex; flex-direction:column; align-items:center; }
+  .tl-dot{ width:22px; height:22px; border-radius:50%; border:2px solid var(--line); background:var(--card); display:flex; align-items:center; justify-content:center; color:var(--muted-2); flex:none; transition:background-color .3s var(--ease),border-color .3s var(--ease),color .3s var(--ease),box-shadow .3s var(--ease); }
+  .tl-dot svg{ width:13px; height:13px; }
+  .tl-line{ width:2px; flex:1; background:var(--line); margin:2px 0; border-radius:2px; }
+  .tl-row:last-child .tl-line{ display:none; }
+  .tl-body{ padding-bottom:14px; }
+  .tl-body .t{ font-size:15.5px; font-weight:600; }
+  .tl-body .s{ font-size:12.5px; color:var(--muted); margin-top:1px; }
+  .tl-row.done .tl-dot{ border-color:var(--good); background:var(--good); color:#fff; }
+  .tl-row.done .tl-line{ background:var(--good); }
+  .tl-row.now .tl-dot{ border-color:var(--accent); background:var(--accent); color:#3a2c00; box-shadow:0 0 0 5px var(--accent-50); }
+  .tl-row.now .tl-body .t{ color:var(--brand-700); }
+
+  .section-label{ font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-3); margin:22px 4px 10px; }
+
+  .btn{ width:100%; height:52px; border-radius:14px; background:var(--brand); color:#fff; font-weight:700; font-size:16px; display:flex; align-items:center; justify-content:center; gap:9px; transition:transform .14s var(--ease), background .2s; box-shadow:0 8px 18px -8px rgba(27,77,209,.6); }
+  .btn:active{ transform:scale(.97); }
+  .btn:disabled{ opacity:.7; }
+  .btn.ghost{ background:var(--brand-50); color:var(--brand-700); box-shadow:none; }
+  .btn svg{ width:19px; height:19px; }
+  .btn .spin{ width:19px; height:19px; border:2.5px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; }
+
+  /* ---------- LOGIN ---------- */
+  .login-wrap{ min-height:100%; display:flex; flex-direction:column; padding-top:calc(var(--safe-t) + 8px); }
+  .brand-mark{ display:flex; flex-direction:column; align-items:center; gap:14px; margin:auto 0 26px; }
+  .logo{ width:74px; height:74px; border-radius:22px; background:linear-gradient(150deg,var(--brand-700),var(--brand)); display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:var(--shadow-2); }
+  .logo svg{ width:38px; height:38px; }
+  .brand-name{ font-size:22px; font-weight:800; letter-spacing:-.02em; }
+  .brand-tag{ font-size:14px; color:var(--muted); margin-top:-8px; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+  .input-wrap{ position:relative; }
+  .field input{ width:100%; height:54px; border-radius:14px; border:1.5px solid var(--line); background:var(--card); padding:0 16px; font-size:16px; color:var(--ink); transition:border-color .18s, box-shadow .18s; }
+  .field input::placeholder{ color:var(--muted-2); }
+  .field input:focus{ outline:none; border-color:var(--brand); box-shadow:0 0 0 4px var(--brand-50); }
+  .field .toggle-eye{ position:absolute; right:8px; top:50%; transform:translateY(-50%); width:44px; height:44px; display:flex; align-items:center; justify-content:center; color:var(--muted); transition:transform .14s var(--ease), color .14s; }
+  .field .toggle-eye svg{ width:20px; height:20px; }
+  .field .toggle-eye:active{ transform:translateY(-50%) scale(.88); color:var(--brand); }
+  .login-hint{ font-size:12.5px; color:var(--muted); text-align:center; margin-top:14px; line-height:1.5; }
+
+  /* ---------- MAP ---------- */
+  .screen[data-screen="map"]{ padding:0; }
+  .map-stage{ position:absolute; inset:0; background:#DCE3EE; }
+  .map-svg{ width:100%; height:100%; }
+  .map-top{ position:absolute; top:calc(var(--safe-t) + 14px); left:14px; right:14px; display:flex; align-items:center; justify-content:space-between; gap:10px; z-index:3; }
+  .map-pill{ background:var(--card); border-radius:999px; padding:9px 14px; font-size:13px; font-weight:600; box-shadow:var(--shadow-1); display:flex; align-items:center; gap:8px; }
+  .map-pill .dot{ width:8px; height:8px; border-radius:50%; background:#ef4444; }
+  .map-card{ position:absolute; left:14px; right:14px; bottom:calc(var(--tabh) + var(--safe-b) + 16px); background:var(--card); border-radius:var(--r-lg); box-shadow:var(--shadow-2); padding:16px; display:flex; align-items:center; gap:14px; z-index:3; animation:rise .4s var(--ease) both; }
+  .map-card .mc-ico{ width:46px; height:46px; border-radius:14px; background:var(--brand-50); color:var(--brand); display:flex; align-items:center; justify-content:center; flex:none; }
+  .map-card .mc-ico svg{ width:24px; height:24px; }
+  .map-card .mc-t{ font-size:16px; font-weight:700; }
+  .map-card .mc-s{ font-size:13px; color:var(--muted); margin-top:1px; }
+  .map-card .mc-eta{ margin-left:auto; text-align:right; }
+  .map-card .mc-eta b{ font-size:20px; font-weight:800; color:var(--brand-700); font-variant-numeric:tabular-nums; }
+  .map-card .mc-eta span{ display:block; font-size:11px; color:var(--muted); }
+  .pin-pulse{ transform-box:fill-box; transform-origin:center; animation:ping 2s ease-out infinite; }
+
+  /* ---------- ALERTS ---------- */
+  .ntf{ display:flex; gap:13px; padding:14px; background:var(--card); border-radius:var(--r-md); box-shadow:var(--shadow-1); margin-bottom:10px; align-items:flex-start; transition:transform .14s var(--ease); animation:rise .4s var(--ease) both; }
+  .ntf:active{ transform:scale(.985); }
+  .ntf .ni{ width:40px; height:40px; border-radius:12px; flex:none; display:flex; align-items:center; justify-content:center; background:var(--brand-50); color:var(--brand); }
+  .ntf .ni svg{ width:20px; height:20px; }
+  .ntf.is-good .ni{ background:var(--good-50); color:var(--good); }
+  .ntf.is-accent .ni{ background:var(--accent-50); color:#9a6a00; }
+  .ntf .nt{ font-size:15px; font-weight:600; line-height:1.3; }
+  .ntf .nt b{ font-weight:800; }
+  .ntf .ns{ font-size:12.5px; color:var(--muted); margin-top:3px; }
+  .ntf .unread{ width:9px; height:9px; border-radius:50%; background:var(--brand); margin-left:auto; flex:none; margin-top:4px; }
+
+  /* ---------- PROFILE ---------- */
+  .profile-card{ display:flex; align-items:center; gap:14px; }
+  .avatar{ width:58px; height:58px; border-radius:18px; background:linear-gradient(150deg,var(--accent),#e89200); color:#3a2c00; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px; flex:none; }
+  .profile-card .pc-name{ font-size:19px; font-weight:800; letter-spacing:-.01em; }
+  .profile-card .pc-sub{ font-size:13.5px; color:var(--muted); margin-top:2px; }
+  .row{ display:flex; align-items:center; gap:13px; padding:15px 16px; background:var(--card); border-radius:var(--r-md); box-shadow:var(--shadow-1); margin-bottom:10px; transition:transform .14s var(--ease); }
+  .row.tappable:active{ transform:scale(.99); }
+  .row .r-ico{ width:38px; height:38px; border-radius:11px; background:var(--brand-50); color:var(--brand); display:flex; align-items:center; justify-content:center; flex:none; }
+  .row .r-ico svg{ width:19px; height:19px; }
+  .row .r-main .r-t{ font-size:15px; font-weight:600; }
+  .row .r-main .r-s{ font-size:12.5px; color:var(--muted); margin-top:1px; }
+  .row .r-end{ margin-left:auto; color:var(--muted-2); display:flex; align-items:center; gap:6px; }
+  .row .r-end .r-val{ font-size:13.5px; color:var(--muted); font-weight:600; }
+  .row .r-end svg{ width:18px; height:18px; }
+
+  /* toggle switch */
+  .switch{ width:46px; height:28px; border-radius:999px; background:var(--line); position:relative; transition:background .22s var(--ease), transform .14s var(--ease); flex:none; }
+  .switch::before{ content:""; position:absolute; top:-9px; bottom:-9px; left:-2px; right:-2px; }
+  .switch::after{ content:""; position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .22s var(--ease); }
+  .switch.on{ background:var(--good); }
+  .switch.on::after{ transform:translateX(18px); }
+  .switch:active{ transform:scale(.96); }
+
+  .danger-row{ color:var(--danger); justify-content:center; font-weight:700; }
+  .danger-row svg{ width:18px; height:18px; }
+
+  /* ---------- BOTTOM TAB BAR ---------- */
+  .tabbar{ flex:none; height:calc(var(--tabh) + var(--safe-b)); padding-bottom:var(--safe-b); background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(14px); -webkit-backdrop-filter:saturate(180%) blur(14px); border-top:1px solid var(--line); display:flex; }
+  .app.no-tabs .tabbar{ display:none; }
+  .tab{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; color:var(--muted-3); position:relative; min-height:44px; }
+  .tab .ico{ width:25px; height:25px; transition:transform .2s var(--ease); }
+  .tab .lbl{ font-size:11px; font-weight:600; letter-spacing:.01em; }
+  .tab.active{ color:var(--brand); }
+  .tab.active .ico{ transform:translateY(-1px); }
+  .tab.pop .ico{ animation:pop .32s var(--ease); }
+  .tab .tab-badge{ position:absolute; top:8px; left:calc(50% + 7px); min-width:16px; height:16px; padding:0 4px; border-radius:999px; background:var(--accent); color:#3a2c00; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px #fff; }
+
+  /* ---------- SHEET + SCRIM ---------- */
+  .scrim{ position:absolute; inset:0; background:rgba(14,23,38,.5); opacity:0; pointer-events:none; transition:opacity .26s var(--ease); z-index:40; }
+  .scrim.open{ opacity:1; pointer-events:auto; }
+  .sheet{ position:absolute; left:0; right:0; bottom:0; background:var(--card); border-radius:24px 24px 0 0; padding:8px 18px calc(var(--safe-b) + 20px); transform:translateY(110%); transition:transform .34s var(--ease); z-index:41; box-shadow:0 -10px 40px -10px rgba(14,23,38,.3); }
+  .sheet.open{ transform:none; }
+  .sheet .grab{ width:40px; height:4px; border-radius:4px; background:var(--line); margin:8px auto 14px; }
+  .sheet h3{ font-size:18px; font-weight:800; letter-spacing:-.01em; }
+  .sheet p{ font-size:13.5px; color:var(--muted); margin-top:3px; }
+  .mini-map{ height:140px; border-radius:16px; overflow:hidden; margin:14px 0; position:relative; border:1px solid var(--line); }
+  .mini-map .mm-pin{ position:absolute; top:46%; left:50%; transform:translate(-50%,-100%); color:var(--brand); }
+  .mini-map .mm-pin svg{ width:30px; height:30px; filter:drop-shadow(0 3px 3px rgba(0,0,0,.25)); }
+
+  /* ---------- TOAST ---------- */
+  .toast{ position:absolute; left:50%; bottom:calc(var(--tabh) + var(--safe-b) + 18px); transform:translate(-50%,20px); background:var(--ink); color:#fff; font-size:14px; font-weight:600; padding:12px 18px; border-radius:14px; box-shadow:var(--shadow-2); opacity:0; pointer-events:none; transition:opacity .26s var(--ease), transform .26s var(--ease); z-index:50; display:flex; align-items:center; gap:9px; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+  .toast svg{ width:18px; height:18px; color:#7CF2A8; }
+
+  /* ---------- SKELETON ---------- */
+  .sk{ background:linear-gradient(100deg,var(--line-2) 30%,#f6f8fc 50%,var(--line-2) 70%); background-size:200% 100%; animation:shimmer 1.3s infinite; border-radius:12px; }
+
+  /* ---------- KEYFRAMES ---------- */
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  @keyframes pop{ 0%{ transform:scale(1); } 45%{ transform:scale(1.28); } 100%{ transform:scale(1); } }
+  @keyframes halo{ 0%{ transform:scale(1); opacity:.7; } 70%,100%{ transform:scale(3); opacity:0; } }
+  @keyframes ping{ 0%{ transform:scale(.6); opacity:.7; } 80%,100%{ transform:scale(2.2); opacity:0; } }
+  @keyframes rise{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:none; } }
+  @keyframes shimmer{ to{ background-position:-200% 0; } }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    .screen{ transform:none; }
+  }
+
+  /* ============================================================
+     DESKTOP: mostrar dentro de uma MAQUETE DE CELULAR
+     ============================================================ */
+  @media (min-width:760px){
+    .stage{ background:radial-gradient(120% 120% at 50% 0%, #e9edf6 0%, #dfe4f0 55%, #d3d9e9 100%); padding:30px 0; gap:16px; }
+    .device{
+      width:392px; height:min(844px, 92dvh); border-radius:54px;
+      background:#0c1320; padding:13px;
+      box-shadow:0 50px 90px -30px rgba(14,23,38,.55), 0 0 0 2px rgba(255,255,255,.04) inset, 0 0 0 11px #0c1320;
+    }
+    .island{ display:block; position:absolute; top:23px; left:50%; transform:translateX(-50%); width:120px; height:32px; background:#0c1320; border-radius:20px; z-index:60; }
+    .app{ border-radius:42px; overflow:hidden; }
+    .statusbar{ display:flex; align-items:center; justify-content:space-between; padding:14px 26px 6px; font-size:13.5px; font-weight:700; color:var(--ink); }
+    .statusbar .sb-r{ display:flex; align-items:center; gap:6px; }
+    .statusbar svg{ width:17px; height:17px; }
+    /* sem safe areas reais no desktop -> compensa com a statusbar */
+    .app{ --safe-t:0px; --safe-b:8px; }
+    .head{ padding-top:14px; }
+    .login-wrap{ padding-top:8px; }
+    .map-top{ top:14px; }
+    .stage-caption{ display:block; font-size:13px; color:#5b6478; font-weight:600; }
+    .stage-caption kbd{ background:#fff; border:1px solid #cdd4e3; border-radius:6px; padding:1px 6px; font-family:inherit; font-size:12px; box-shadow:0 1px 0 #cdd4e3; }
+  }
+  @media (min-width:760px) and (max-height:720px){
+    .device{ height:92dvh; border-radius:44px; }
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="device">
+    <div class="island"></div>
+    <div class="app no-tabs" id="app">
+
+      <!-- faux status bar (só no desktop/maquete) -->
+      <div class="statusbar">
+        <span id="sbClock">8:42</span>
+        <span class="sb-r">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 16h3v4H2zM7 12h3v8H7zM12 8h3v12h-3zM17 4h3v16h-3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13a10 10 0 0 1 14 0M8.5 16.5a5 5 0 0 1 7 0M12 20h.01"/></svg>
+          <svg viewBox="0 0 26 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="18" height="10" rx="3"/><rect x="4" y="9" width="12" height="6" rx="1.5" fill="currentColor"/><path d="M22 11v2" stroke-linecap="round"/></svg>
+        </span>
+      </div>
+
+      <div class="viewport" id="viewport">
+
+        <!-- ===================== LOGIN ===================== -->
+        <section class="screen is-active" data-screen="login">
+          <div class="login-wrap">
+            <div class="brand-mark">
+              <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/><path d="M5 9h11"/></svg>
+              </div>
+              <div style="text-align:center">
+                <div class="brand-name" id="brandName">Expresso Saquarema</div>
+                <div class="brand-tag">Acompanhe a viagem do estudante</div>
+              </div>
+            </div>
+
+            <form id="loginForm" autocomplete="on" novalidate>
+              <div class="field">
+                <label for="cel">Celular</label>
+                <input id="cel" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(22) 99999-9999" value="(22) 99876-5432">
+              </div>
+              <div class="field">
+                <label for="cpf">Senha (seu CPF)</label>
+                <div class="input-wrap">
+                  <input id="cpf" type="password" inputmode="numeric" autocomplete="current-password" placeholder="000.000.000-00" value="12345678900">
+                  <button type="button" class="toggle-eye" id="eyeBtn" aria-label="Mostrar senha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <button class="btn" id="loginBtn" type="submit">
+                <span class="btn-label">Entrar</span>
+              </button>
+              <p class="login-hint">Sem cadastro. A empresa já deixou seu acesso pronto.<br>É só entrar com o número e o CPF.</p>
+            </form>
+          </div>
+        </section>
+
+        <!-- ===================== HOME / INÍCIO ===================== -->
+        <section class="screen" data-screen="home">
+          <header class="head">
+            <div>
+              <h1>Olá!</h1>
+              <div class="sub" id="homeSub">Acompanhando <b>Helena</b> · Rota Centro</div>
+            </div>
+            <button class="icon-btn" aria-label="Avisos" data-go="alerts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            </button>
+          </header>
+
+          <!-- skeleton (some apos load) -->
+          <div id="homeSkeleton">
+            <div class="sk" style="height:150px;border-radius:22px"></div>
+            <div class="sk" style="height:20px;width:40%;margin:24px 4px 14px"></div>
+            <div class="sk" style="height:150px;border-radius:16px"></div>
+          </div>
+
+          <!-- conteudo real -->
+          <div id="homeContent" hidden>
+            <div class="status">
+              <span class="live"><span class="dot"></span> Ao vivo</span>
+              <div class="st-title" id="homeStatus">A caminho do seu ponto</div>
+              <div class="eta">Chega em <b id="homeEta">8 min</b> · Rota Centro ↔ Campus Niterói</div>
+              <div class="bus-illus">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/><path d="M5 9h11"/></svg>
+              </div>
+            </div>
+
+            <button class="btn ghost" style="margin-top:14px" data-go="map">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20 3 17V4l6 3 6-3 6 3v13l-6-3-6 3Z"/><path d="M9 7v13M15 4v13"/></svg>
+              Ver no mapa
+            </button>
+
+            <div class="section-label">Hoje · ida</div>
+            <div class="card">
+              <div class="timeline">
+                <div class="tl-row done">
+                  <div class="tl-mark"><span class="tl-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m20 6-11 11-5-5"/></svg></span><span class="tl-line"></span></div>
+                  <div class="tl-body"><div class="t">O ônibus saiu</div><div class="s">17:55 · da faculdade</div></div>
+                </div>
+                <div class="tl-row now">
+                  <div class="tl-mark"><span class="tl-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/></svg></span><span class="tl-line"></span></div>
+                  <div class="tl-body"><div class="t">A caminho do seu ponto</div><div class="s">chegando em ~8 min</div></div>
+                </div>
+                <div class="tl-row">
+                  <div class="tl-mark"><span class="tl-dot"></span></div>
+                  <div class="tl-body"><div class="t">Chegou ao destino</div><div class="s">previsto · 18:35</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MAPA ===================== -->
+        <section class="screen" data-screen="map">
+          <div class="map-stage">
+            <svg class="map-svg" viewBox="0 0 390 760" preserveAspectRatio="xMidYMid slice" aria-label="Mapa do trajeto do ônibus">
+              <rect width="390" height="760" fill="#DCE3EE"/>
+              <!-- quadras -->
+              <g stroke="#CCD4E1" stroke-width="10">
+                <path d="M-20 150H410M-20 320H410M-20 490H410M-20 640H410"/>
+                <path d="M70 -20V780M180 -20V780M300 -20V780"/>
+              </g>
+              <g fill="#D3DBE8"><rect x="86" y="166" width="78" height="138" rx="6"/><rect x="196" y="166" width="88" height="138" rx="6"/><rect x="86" y="336" width="78" height="138" rx="6"/><rect x="196" y="506" width="88" height="118" rx="6"/></g>
+              <!-- rota -->
+              <path id="route" d="M40 700 C 120 660, 80 540, 180 500 S 300 430, 300 330 S 200 220, 210 120 250 60 320 50" fill="none" stroke="#1B4DD1" stroke-width="7" stroke-linecap="round" opacity=".9"/>
+              <!-- destino -->
+              <g transform="translate(320,50)"><circle r="11" fill="#fff" stroke="#16A34A" stroke-width="5"/></g>
+              <!-- seu ponto (pulse) -->
+              <g transform="translate(300,330)">
+                <circle class="pin-pulse" r="10" fill="#F4A900"/>
+                <circle r="7" fill="#F4A900" stroke="#fff" stroke-width="3"/>
+              </g>
+              <!-- onibus animado -->
+              <g>
+                <g transform="translate(-13,-13)">
+                  <circle cx="13" cy="13" r="15" fill="#1B4DD1" stroke="#fff" stroke-width="3"/>
+                  <g transform="translate(13,13)" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round"><path d="M-6 -4h12v8h-12z"/><path d="M-6 0h12"/><path d="M-4 4v2M4 4v2"/></g>
+                </g>
+                <animateMotion id="busMotion" dur="16s" repeatCount="indefinite" rotate="0" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+                  <mpath href="#route"/>
+                </animateMotion>
+              </g>
+            </svg>
+
+            <div class="map-top">
+              <div class="map-pill"><span class="dot"></span> Ao vivo</div>
+              <div class="map-pill">Rota Centro</div>
+            </div>
+
+            <div class="map-card">
+              <div class="mc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></div>
+              <div>
+                <div class="mc-t">Chegando ao seu ponto</div>
+                <div class="mc-s">Rua das Flores, 120</div>
+              </div>
+              <div class="mc-eta"><b id="mapEta">8</b><span>min</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== AVISOS ===================== -->
+        <section class="screen" data-screen="alerts">
+          <header class="head"><div><h1>Avisos</h1><div class="sub">Tudo o que aconteceu na viagem</div></div></header>
+          <div class="section-label" style="margin-top:6px">Hoje</div>
+          <div id="alertsList">
+            <div class="ntf is-accent" style="animation-delay:.04s"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg></span><div><div class="nt"><b>A caminho do seu ponto.</b> Chegada em ~8 min.</div><div class="ns">Hoje · agora</div></div><span class="unread"></span></div>
+            <div class="ntf" style="animation-delay:.1s"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span><div><div class="nt">O ônibus <b>saiu</b> da faculdade.</div><div class="ns">Hoje · 17:55</div></div><span class="unread"></span></div>
+          </div>
+          <div class="section-label">Ontem</div>
+          <div class="ntf is-good" style="animation-delay:.18s"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m20 6-11 11-5-5"/></svg></span><div><div class="nt"><b>Chegou ao destino.</b></div><div class="ns">Ontem · 18:41</div></div></div>
+          <div class="ntf" style="animation-delay:.22s"><span class="ni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span><div><div class="nt">O ônibus <b>saiu</b> da faculdade.</div><div class="ns">Ontem · 17:58</div></div></div>
+        </section>
+
+        <!-- ===================== PERFIL ===================== -->
+        <section class="screen" data-screen="profile">
+          <header class="head"><div><h1>Perfil</h1></div></header>
+          <div class="card profile-card">
+            <div class="avatar">H</div>
+            <div><div class="pc-name">Helena Martins</div><div class="pc-sub">Eng. Civil · 3º período</div></div>
+          </div>
+
+          <div class="section-label">Onde te avisar</div>
+          <div class="row tappable" id="pointRow">
+            <span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg></span>
+            <div class="r-main"><div class="r-t">Ponto de referência</div><div class="r-s" id="pointVal">Rua das Flores, 120</div></div>
+            <span class="r-end"><span class="r-val">Alterar</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+          </div>
+
+          <div class="section-label">Avisos</div>
+          <div class="row"><span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17V7a2 2 0 0 1 2-2h11l5 5v7"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/></svg></span><div class="r-main"><div class="r-t">Quando o ônibus sair</div></div><span class="switch on" data-switch role="switch" aria-checked="true" tabindex="0"></span></div>
+          <div class="row"><span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z"/></svg></span><div class="r-main"><div class="r-t">Ao passar no meu ponto</div></div><span class="switch on" data-switch role="switch" aria-checked="true" tabindex="0"></span></div>
+          <div class="row"><span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m20 6-11 11-5-5"/></svg></span><div class="r-main"><div class="r-t">Quando chegar</div></div><span class="switch on" data-switch role="switch" aria-checked="true" tabindex="0"></span></div>
+
+          <div class="section-label">Quem acompanha</div>
+          <div class="row"><span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg></span><div class="r-main"><div class="r-t">Você</div><div class="r-s">Mãe · recebe os avisos</div></div></div>
+
+          <div class="section-label">&nbsp;</div>
+          <button class="row tappable danger-row" id="logoutBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            Sair
+          </button>
+        </section>
+
+      </div><!-- /viewport -->
+
+      <!-- ===================== TAB BAR ===================== -->
+      <nav class="tabbar" id="tabbar" aria-label="Navegação principal">
+        <button class="tab" data-tab="home" aria-label="Início">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg>
+          <span class="lbl">Início</span>
+        </button>
+        <button class="tab" data-tab="map" aria-label="Mapa">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20 3 17V4l6 3 6-3 6 3v13l-6-3-6 3Z"/><path d="M9 7v13M15 4v13"/></svg>
+          <span class="lbl">Mapa</span>
+        </button>
+        <button class="tab" data-tab="alerts" aria-label="Avisos">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="lbl">Avisos</span>
+          <span class="tab-badge" id="alertsBadge">2</span>
+        </button>
+        <button class="tab" data-tab="profile" aria-label="Perfil">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="lbl">Perfil</span>
+        </button>
+      </nav>
+
+      <!-- scrim + sheet (alterar ponto) -->
+      <div class="scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Alterar ponto de referência">
+        <div class="grab"></div>
+        <h3>Onde você quer ser avisada?</h3>
+        <p>Arraste o pino até o seu ponto. É aqui que o app vai te avisar quando o ônibus passar.</p>
+        <div class="mini-map">
+          <svg viewBox="0 0 360 140" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%">
+            <rect width="360" height="140" fill="#DCE3EE"/>
+            <g stroke="#CCD4E1" stroke-width="9"><path d="M-10 50H370M-10 100H370M120 -10V150M250 -10V150"/></g>
+            <path d="M20 120 C 90 100, 110 60, 200 56 S 320 30, 350 24" fill="none" stroke="#1B4DD1" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <span class="mm-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.6" fill="#fff"/></svg></span>
+        </div>
+        <button class="btn" id="savePointBtn">Salvar este ponto</button>
+      </div>
+
+      <!-- toast -->
+      <div class="toast" id="toast" role="status" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m20 6-11 11-5-5"/></svg><span id="toastMsg">Pronto!</span></div>
+
+    </div><!-- /app -->
+  </div><!-- /device -->
+  <p class="stage-caption">Protótipo interativo · toque/clique para navegar</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  /* ====== MARCA (white-label): troque aqui ====== */
+  var BRAND = "Expresso Saquarema";
+  document.getElementById('brandName').textContent = BRAND;
+
+  var app = document.getElementById('app');
+  var screens = {};
+  document.querySelectorAll('.screen').forEach(function(s){ screens[s.dataset.screen] = s; });
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var TAB_SCREENS = ['home','map','alerts','profile'];
+  var current = 'login';
+
+  function setActive(name, push){
+    if(!screens[name]) return;
+    Object.keys(screens).forEach(function(k){ screens[k].classList.toggle('is-active', k===name); });
+    // reset scroll
+    if(screens[name]) screens[name].scrollTop = 0;
+    var isLogin = (name==='login');
+    app.classList.toggle('no-tabs', isLogin);
+    tabs.forEach(function(t){
+      var on = (t.dataset.tab===name);
+      t.classList.toggle('active', on);
+      if(on){ t.classList.remove('pop'); void t.offsetWidth; t.classList.add('pop'); }
+    });
+    current = name;
+    if(name==='home') runHomeLoad();
+    if(name==='alerts') clearBadge();
+    // hash sync (deep-linking) + histórico para o "voltar" do aparelho funcionar
+    var h = '#'+name;
+    if(location.hash !== h){
+      if(push){ history.pushState(null,'',h); } else { history.replaceState(null,'',h); }
+    }
+  }
+
+  // navegação por hash (deep-linking)
+  function fromHash(){
+    var h = (location.hash||'').replace('#','');
+    if(TAB_SCREENS.indexOf(h)>=0){ setActive(h, false); }
+    else { setActive('login', false); }
+  }
+
+  // tabs
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ if(current!==t.dataset.tab) setActive(t.dataset.tab, true); }); });
+  // botões com data-go
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click', function(){ setActive(b.dataset.go, true); }); });
+
+  /* ====== LOGIN ====== */
+  var loginForm = document.getElementById('loginForm');
+  var loginBtn = document.getElementById('loginBtn');
+  loginForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(loginBtn.disabled) return;
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spin"></span>';
+    setTimeout(function(){
+      loginBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m20 6-11 11-5-5"/></svg>';
+      setTimeout(function(){
+        setActive('home', true);
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span class="btn-label">Entrar</span>';
+      }, 380);
+    }, 1100);
+  });
+  // mostrar/ocultar senha
+  var eyeBtn = document.getElementById('eyeBtn'), cpf = document.getElementById('cpf');
+  eyeBtn.addEventListener('click', function(){
+    var show = cpf.type==='password';
+    cpf.type = show ? 'text' : 'password';
+    eyeBtn.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+  });
+
+  /* ====== HOME: skeleton -> conteúdo + ETA tickando ====== */
+  var homeLoaded = false, etaMin = 8, etaTimer = null;
+  function setEtaText(){ var he=document.getElementById('homeEta'), me=document.getElementById('mapEta'); if(he) he.textContent=etaMin+' min'; if(me) me.textContent=etaMin; }
+  function runHomeLoad(){
+    var sk = document.getElementById('homeSkeleton'), ct = document.getElementById('homeContent');
+    if(homeLoaded){ sk.hidden = true; ct.hidden = false; return; }
+    sk.hidden = false; ct.hidden = true;
+    setTimeout(function(){ sk.hidden = true; ct.hidden = false; homeLoaded = true; setEtaText(); startEta(); }, 720);
+  }
+  function startEta(){
+    if(etaTimer) return;
+    etaTimer = setInterval(function(){ if(etaMin>1){ etaMin--; } setEtaText(); }, 5000);
+  }
+
+  /* ====== AVISOS: badge ====== */
+  function clearBadge(){ var b = document.getElementById('alertsBadge'); if(b){ b.style.display='none'; } document.querySelectorAll('.unread').forEach(function(u){ u.style.display='none'; }); }
+
+  /* ====== TOGGLES ====== */
+  document.querySelectorAll('[data-switch]').forEach(function(sw){
+    var row = sw.closest('.row'); var lbl = row && row.querySelector('.r-t');
+    if(lbl && !sw.getAttribute('aria-label')) sw.setAttribute('aria-label', lbl.textContent.trim());
+    function toggle(){ var on = sw.classList.toggle('on'); sw.setAttribute('aria-checked', on?'true':'false'); }
+    sw.addEventListener('click', toggle);
+    sw.addEventListener('keydown', function(e){ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); } });
+  });
+
+  /* ====== SHEET (alterar ponto) ====== */
+  var scrim = document.getElementById('scrim'), sheet = document.getElementById('sheet');
+  function openSheet(){ scrim.classList.add('open'); sheet.classList.add('open'); }
+  function closeSheet(){ scrim.classList.remove('open'); sheet.classList.remove('open'); }
+  document.getElementById('pointRow').addEventListener('click', openSheet);
+  scrim.addEventListener('click', closeSheet);
+  document.getElementById('savePointBtn').addEventListener('click', function(){
+    closeSheet();
+    setTimeout(function(){ showToast('Ponto de referência salvo'); }, 260);
+  });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && sheet.classList.contains('open')) closeSheet(); });
+
+  /* ====== LOGOUT ====== */
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    homeLoaded=false; if(etaTimer){ clearInterval(etaTimer); etaTimer=null; } etaMin=8;
+    var bdg=document.getElementById('alertsBadge'); if(bdg) bdg.style.display='';
+    document.querySelectorAll('.unread').forEach(function(u){ u.style.display=''; });
+    setActive('login', true);
+  });
+
+  /* ====== TOAST ====== */
+  var toast = document.getElementById('toast'), toastT;
+  function showToast(msg){
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
+  }
+
+  /* ====== relógio faux (statusbar) ====== */
+  function tickClock(){ try{ var d=new Date(); document.getElementById('sbClock').textContent = d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); }catch(e){} }
+  tickClock(); setInterval(tickClock, 30000);
+
+  /* ====== reduced motion: pausa o ônibus (SMIL) ====== */
+  try{
+    var bm = document.getElementById('busMotion');
+    if(bm && window.matchMedia){
+      var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var applyBus = function(){ bm.setAttribute('dur', mq.matches ? '0.001s' : '16s'); };
+      applyBus();
+      if(mq.addEventListener){ mq.addEventListener('change', applyBus); }
+    }
+  }catch(e){}
+
+  window.addEventListener('hashchange', fromHash);
+  fromHash(); // estado inicial (suporta deep-link: #home, #map, #alerts, #profile)
+})();
+</script>
+</body>
+</html>
